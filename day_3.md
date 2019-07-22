@@ -9,7 +9,7 @@ https://bundler.io/
 
 Bundler ile bir ruby projesinde gem'leri kolayca yönetebiliriz.
 
-```
+```sh
 mkdir bundler_test
 cd bundler_test
 bundle init
@@ -26,27 +26,27 @@ Bundler, bir dünya gem olması, ve bir projede bir çok gem kullandıldığınd
 ## rbenv
 
 Rbenv ile kurabileceğimiz ruby versiyonlarına aşağıdaki gibi bakabiliriz.
-```
+```sh
 rbenv install --list
 ```
 
 rbenv update'lemek için
-```
+```sh
 cd /home/fsutil/.rbenv/plugins/ruby-build && git pull && cd -
 ```
 
 version kurmak için
-```
+```sh
 rbenv install 2.7.0-preview1
 ```
 
 global ruby version setlemek için
-```
+```sh
 rbenv global 2.7.0-preview1
 ```
 
 bi projeye özel set'lemek için
-```
+```sh
 rbenv local 2.5.3
 ```
 
@@ -55,9 +55,11 @@ rbenv local 2.5.3
 ## rack
 
 gemfile'e
-`gem 'rack', '~> 2.0.1'`
-
+```ruby
+gem 'rack', '~> 2.0.1'
 ```
+
+```sh
 bundle install
 ```
 
@@ -70,7 +72,7 @@ bundle install
 require,
 
 git,
-```
+```ruby
 gem 'nokogiri', :git => '', :branch => '1.4'
 ```
 

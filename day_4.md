@@ -19,13 +19,13 @@ thin ruby webserver
 ruby unicorn
 
 config.ru
-```
+```ruby
 require './myapp.rb'
 run myapp
 ```
 
 myapp.rb
-```
+```ruby
 require 'rack'
 require "rack/handler/puma"
  
@@ -36,7 +36,7 @@ end
 Rack::Handler::Puma.run myapp
 ```
 
-```
+```ruby
 rackup
 ```
 
@@ -80,14 +80,18 @@ Session, cookie. Sunucunun client'ı tanımasını sağlar.
 
 
 ```
+  -------                  ------
  | Model |                | View |
+  -------                  ------
     \                         /
      \                       /
       \                     /
        \                   /
+         ------------------
         | Controller       |
         | Routing          |
         | Front Controller |
+         ------------------
 ```
 
 ```
@@ -126,7 +130,6 @@ Rails'de SQL sorguları model üzerinde otomatik olarak oluşturulur. Bunu ORM s
 Model katmanında yapılacak sorgu işlemleri yapıldıktan sonra controller view katmanınına gider.
 
 **View**
-
 - assets
 - layout
 - template
@@ -136,4 +139,100 @@ controllers/users_controller.rb
 views/users/index.html.erb  
 models/user.rb
 
+## Active Record
 
+Convention over Configuration.
+
+Kurallara uyulmayabilir ama bu durumda hata oluşabilir.
+
+Keskin bıçaklar. Standartları kendine göre değiştirebilirsin, ama bu durumda bıçak üstünde olduğunu unutma!
+
+```
+    DATABASE
+ --------------
+|  PostgreSQL  |
+|  SQLite      |
+|  MySQL       |
+|  MongoDB     |
+ --------------
+```
+
+```
+DB (host, username, password)                       ORM (Active Record)
+  -> Scheama
+     -> Table   <----------------------------->  Class
+       -> Column  <------------------------>  Attribute
+         -> Type
+```
+
+```
+       -----
+      | ORM |
+       -----
+         |
+         | Connection
+         |
+         |
+     -----------------
+    | PostgreSQL      |
+    |                 |
+    | Connection Pool |
+     -----------------
+```
+
+Connection kurulması için
+- DB Name
+- Username
+- Password
+- Host
+- Adapter (driver)
+
+**Model ve Tablo karışılıkları**
+```
+Model/Class            Table/Schema
+Article 	           articles
+LineItem 	           line_items
+Deer 	               deers
+Mouse 	               mice
+Person 	               people
+```
+
+10000000 = 10_000_000
+
+Primary key  
+Foreign key
+
+#### Model'in yazılması
+
+```ruby
+class Product < ApplicationRecord
+end
+```
+
+ApplicationRecord tarafından setter ve getter'ları oluşturur. Bu bir kere oluşturulup cache'lenir.
+
+```ruby
+def name #getter method
+  @name
+end
+
+def name=(name) #setter method
+  @name = name
+end
+```
+
+User.class_methods.add(new_method) gibi birşeyler yapılabiliyor
+
+attr_reader (setter oluşturma)  
+attr_writer (getter oluşturma)  
+attr_accessor (setter ve getter oluşturma)  
+
+---
+
+Eğer db'deki farklı bir tablo kullanmak, elle vermek ister isek
+```ruby
+class Product < ApplicationRecord
+  self.table_name = "my_products"
+end
+```
+şeklinde yapabiliriz.

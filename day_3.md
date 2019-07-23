@@ -3,8 +3,6 @@
 * Ruby ----> default yorumlayıcısı Matz tarafından yazılan MRI yorumlayıcısıdır.
 * Rails Toolbox
 
----
-
 ## bundler
 
 https://bundler.io/
@@ -22,8 +20,6 @@ yaptığımızda Gemfile dosyasını yaratacak.
 **DSL** - Domain Specific Language
 
 Bundler, bir dünya gem olması, ve bir projede bir çok gem kullandıldığından otomatik olarak herşeyi kurmak içindir. (örneğin projemizde prawn var, gem install prawn yapmak yerine Gemfile'e yazarız ve bundler ile kurulumunu yapabiliriz.)
-
----
 
 ## rbenv
 
@@ -52,8 +48,6 @@ projeye özel bir ruby versiyonu set'lemek için
 rbenv local 2.5.3
 ```
 
----
-
 ## rack
 
 gemfile'e
@@ -66,8 +60,6 @@ bundle install
 ```
 
 * Sistemde hali hazırda var ise `using`, yok ise `installing` der.
-
----
 
 ## bundle
 
@@ -84,8 +76,6 @@ Gemfile'da ruby versiyonu belirtebiliriz. İlgili versiyon kullanılmıyorsa hat
 * ">=" ise eşit veya büyük olabilir ama asla majorü kapsamaz.
 * ""
 ODEV
-
----
 
 ## Hyper Text Transfer Protocol
 

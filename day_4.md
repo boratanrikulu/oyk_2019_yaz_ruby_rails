@@ -2,23 +2,24 @@
 
 * *[cloudflare](https://www.cloudflare.com/)* - Örnek bir Domain Name Server
 
-Request pdf için gelir ise, accept_language pdf olarak, html set'lenir ise text/html olarak geri dönüş yapılır.
+Request yani istek olarak bir PDF isteği gelir ise; accept_language PDF olarak ayarlanır(set'lenir.)  
+İstek html için gelmişse accept_language text/html olur.
 
 ## Rack
 
 https://rack.github.io/
 
-Ruby'nin http isteklerini anlayabilmesi için araya *rack* katmanı girer.
+Ruby'nin http isteklerini anlayabilmesi için araya **rack** katmanı girer.
 
-`Rack provides a minimal interface between webservers that support Ruby and Ruby frameworks.`
+> Rack provides a minimal interface between webservers that support Ruby and Ruby frameworks.
 
 Herhangi bir dizinde *config.ru* var ise o bir **webserver**'dır. Gelen isteklere cevap verebilir.
 
-Proje ayaklandığında **puma** adında bir web sunucusu çalışır.
+Uygulama sunucusu alternatifleri  
 
-puma (application web server) (http://puma.io/)
-thin ruby webserver
-ruby unicorn
+- puma (application web server) (http://puma.io/)  
+- thin ruby webserver  
+- ruby unicorn
 
 ```ruby
 # config.ru
@@ -30,11 +31,11 @@ run myapp
 # myapp.rb
 require 'rack'
 require "rack/handler/puma"
- 
+
 myapp = Proc.new do |env|
     ['200', {'Content-Type' => 'text/html'}, ['A barebones rack app.']]
 end
- 
+
 Rack::Handler::Puma.run myapp
 ```
 
@@ -76,8 +77,6 @@ Session, cookie, sunucunun client'ı tanımasını sağlar.
    |  PostgreSQL  |
    |              |
     --------------
-
-
 ```
 
 
@@ -110,7 +109,7 @@ FrontController adında bir design pattern var. MVC'lerin hepsi başlangıçta F
 ```
 GET
 POST
-PUT/PACTH
+PUT/PATCH
 DELETE
 ```
 
@@ -122,7 +121,7 @@ Controller'a gidilten sonra eğer DB üzerinde bir işlem yapılacak ise Model k
 
 SQL sorguları iki gruba ayrılır. SQL aslında bir DSL'dir yani Domain Specific Language.
 
-**DFL** - Data Defination Language
+**DDL** - Data Defination Language
 **DML** - Data Manupilation Lanugage
 
 Rails'de SQL sorguları model üzerinde otomatik olarak oluşturulur. Bunu ORM sağlar yani Object Relation Mapping.
@@ -161,7 +160,6 @@ Keskin bıçaklar. Standartları kendine göre değiştirebilirsin, ama bu durum
 ```
 
 ```
-
 DB (host, username, password)                       ORM (Active Record)
   -> Scheama
      -> Table   <----------------------------->  Class
@@ -193,21 +191,20 @@ Connection kurulması için
 
 **Model ve Tablo karışılıkları**
 
-```
-Model/Class            Table/Schema
-Article 	           articles
-LineItem 	           line_items
-Deer 	               deers
-Mouse 	               mice
-Person 	               people
-```
+| Model/Class | Table/Schema |
+|:-----------:|:------------:|
+| Article | articles |
+| LineItem | line_items |
+| Deer | deers |
+| Mouse | mice |
+| Person | people |
 
 > 10000000 == 10_000_000
 
 *Primary key*  
 *Foreign key*
 
-#### Model'in yazılması
+## Model'in yazılması
 
 ```ruby
 class Product < ApplicationRecord
@@ -234,7 +231,7 @@ User.class_methods.add(new_method) gibi birşeyler yapılabiliyor.
 
 ---
 
-Eğer db'deki farklı bir tabloyu kullanmak, ismini elle girmek istersek
+Eğer db'deki farklı bir tabloyu kullanmak, kullanılan tablo adını elle girmek istersek
 
 ```ruby
 class Product < ApplicationRecord
@@ -244,16 +241,16 @@ end
 
 şeklinde yapabiliriz.
 
-#### CRUD (Create, Read, Update, Delete)
+## CRUD (Create, Read, Update, Delete)
 
-##### Create
+### Create
 
 ```ruby
 user = User.new(name: "Bora", surname: "Tanrikulu")
 user.save
 ```
 
-##### Read
+### Read
 
 ```ruby
 # return a collection with all users
@@ -275,13 +272,13 @@ david = User.find_by(name: "Bora")
 users = User.where(name: 'Bora', surname: 'Tanrikulu').order(created_at: :desc)
 ```
 
-##### Find
+### Find
 
 Bir object dönerken, **Where** bir collection dönecektir.
 
 *Collection*, içersinde birden fazla obje saklayan yapıdır.
 
-##### Update
+### Update
 
 ```ruby
 user = User.find_by(name: 'Bora')
@@ -298,7 +295,7 @@ user.update(name: 'Asya')
 User.update_all "max_login_attempts = 3, must_change_password = 'true'"
 ```
 
-##### Delete
+### Delete
 
 ```ruby
 user = User.find_by(name: 'David')
@@ -308,12 +305,12 @@ user.destroy
 ```ruby
 # find and delete all users named David
 User.where(name: 'David').destroy_all
- 
+
 # delete all users
 User.destroy_all
 ```
 
-#### Validation
+### Validation
 
 İlgili veriler için kontrol yapabilmemizi sağlar. Bu işlem sunucu tarafı validasyondur. İstemci tarafında da validasyon işlemi yapılabilir (submit butonunu disable yapmak gibi). Fakat asla son kullanıcıya güvenilmemelidir. Sunucu tarafında validasyon yapmak oldukça önemlidir!
 
@@ -321,7 +318,7 @@ User.destroy_all
 class User < ApplicationRecord
   validates :name, presence: true
 end
- 
+
 user = User.new
 user.save  # => false
 user.save! # => ActiveRecord::RecordInvalid: Validation failed: Name can't be blank
@@ -339,11 +336,11 @@ user.save! # => ActiveRecord::RecordInvalid: Validation failed: Name can't be bl
 |
 ```
 
-#### Callbacks
+### Callbacks
 
 -
 
-#### Migrations
+### Migrations
 
 ```ruby
 class CreatePublications < ActiveRecord::Migration[5.0]
@@ -355,7 +352,7 @@ class CreatePublications < ActiveRecord::Migration[5.0]
       t.integer :publisher_id
       t.string :publisher_type
       t.boolean :single_issue
- 
+
       t.timestamps
     end
     add_index :publications, :publication_type_id
@@ -374,8 +371,6 @@ Migration'ı geri almak:
 ```ruby
 rails db:rollback
 ```
-
----
 
 ## Migrations
 
@@ -529,7 +524,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
 end
 ```
 
-#### References
+## References
 
 ```sh
 rails generate migration AddUserRefToProducts user:references
@@ -544,7 +539,7 @@ User'ların product'ları olsun.
                              /
     ---------               /
    | Product |  ------ ----/
-    --------- 
+    ---------
 ```
 
 Bu durumda Product altında user_id diye bir column tutarız.
@@ -567,7 +562,7 @@ end
 
 Reference kolonları yani foreign_key'ler her zaman index'lenir.
 
-#### Join Tables
+### Join Tables
 
 Ara tablolar.
 
@@ -580,7 +575,7 @@ Many-to-many ilişki
                               /
     ---------                /
    | Product |  ------------/
-    ---------   \ 
+    ---------   \
                  \
                   ------------------------
                                           \

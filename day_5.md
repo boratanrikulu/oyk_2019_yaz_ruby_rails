@@ -373,3 +373,442 @@ class Profile < ApplicationRecord
                             less_than_or_equal_to: 99 }
 end
 ```
+
+## Callbacks
+
+Hook - Webhook
+
+Life cycle
+
+Event - Event Driven Development
+
+Callback örneği olarak bir kullanıcı üye olduktan sonra e-posta atılması verilebilir.
+
+Trigger (DB), bişey olduğunda tetikle
+
+---
+
+Örneğin aşağıdaki örnekte girilen name ifadesini validate'e sokmadan önce büyük harf yapabiliriz.
+
+```ruby
+class User < ApplicationRecord
+  validates :login, :email, presence: true
+ 
+  before_create do
+    self.name = login.capitalize if name.blank?
+  end
+end
+```
+
+Callback'lerde de validation'da olduğu gibi **on** kullanılarak belli koşullarda kullanabiliriz.
+
+```ruby
+
+class User < ApplicationRecord
+  before_validation :normalize_name, on: :create
+ 
+  # :on takes an array as well
+  after_validation :set_location, on: [ :create, :update ]
+ 
+  private
+    def normalize_name
+      self.name = name.downcase.titleize
+    end
+ 
+    def set_location
+      self.location = LocationService.query(self)
+    end
+end
+```
+
+---
+
+before_validation  
+after_validation
+
+```
+ >------------------
+                    |  Before Validation
+                    |  After Validation
+                    |  Before Save
+                    |  After Save
+                    |  Before Commit
+                    |  After Commit
+ <------------------                   
+```
+
+Model işini bitirdikten sonra db'e işlemi yapmak için gider ve commit yapar.
+
+before_commit  
+after_save
+
+---
+
+after_initialize  
+after_find
+
+```ruby
+
+class User < ApplicationRecord
+  after_initialize do |user|
+    puts "You have initialized an object!"
+  end
+ 
+  after_find do |user|
+    puts "You have found an object!"
+  end
+end
+ 
+>> User.new
+You have initialized an object!
+=> #<User id: nil>
+ 
+>> User.first
+You have found an object!
+You have initialized an object!
+=> #<User id: 1>
+```
+
+---
+
+after_touch ise bir şey update olduğunda tetiklenir.
+
+```ruby
+
+class Employee < ApplicationRecord
+  belongs_to :company, touch: true
+  after_touch do
+    puts 'An Employee was touched'
+  end
+end
+ 
+class Company < ApplicationRecord
+  has_many :employees
+  after_touch :log_when_employees_or_company_touched
+ 
+  private
+  def log_when_employees_or_company_touched
+    puts 'Employee/Company was touched'
+  end
+end
+ 
+>> @employee = Employee.last
+=> #<Employee id: 1, company_id: 1, created_at: "2013-11-25 17:04:22", updated_at: "2013-11-25 17:05:05">
+ 
+# triggers @employee.company.touch
+>> @employee.touch
+Employee/Company was touched
+An Employee was touched
+=> true
+```
+
+---
+
+Aşağıdaki durumlarda callback yapılamaz.
+
+decrement  
+decrement_counter  
+delete  
+delete_all  
+increment  
+increment_counter  
+toggle  
+update_column  
+update_columns  
+update_all  
+update_counters
+
+Destroy'da callback fırlar iken delete'de fırlamaz..
+
+---
+
+`throw :abort` yapınca lifecycle geri sarıp başa dönebiliriz.
+
+---
+
+Parent'ler silindiğinde child'ları da silmek istersek
+```ruby
+class User < ApplicationRecord
+  has_many :articles, dependent: :destroy
+end
+```
+
+---
+
+Aynı callback birden fazla yerde yapılıyor ise ortak callback'ler app/callbacks dizi içersinde bir class olarak oluşturularak ortakça kullanılabilir.
+
+---
+
+DB'deye kesinlikle yazıldıktan sonra bi işlem yapıyorsak
+
+`after_commit` ile yaparız.
+
+---
+
+Şimdi öğrendiğimiz bilgiler ile projemize devam edelim.
+
+Projede User'a full_name eklicez ve bu full_name, first ve last name'ler ile dolacak. Ve zorunlu.
+
+```sh
+rails generate migration AddFullNameToUsers full_name:string
+```
+
+```ruby
+# Validations
+validates :email,
+          :full_name
+          :first_name,
+          :last_name
+          :password,
+          presence: true
+```
+
+```ruby
+# Callbacks
+before_validation :prepare_full_name
+
+private
+
+def prepare_full_name
+  self.full_name = "#{first_name} #{last_name}"
+end
+```
+
+---
+
+## Associations
+
+> Rails'i rails yapan işlev.
+
+Model'ler arasında ilişki ağı kurmak için (database'deki gibi).
+
+Veritabanımız ilişkisel, modellerimizde ilişkisel yapıyoruz.
+
+Öksüz kayıt durumunu çözmek için ilişki kurulurken `dependent: :destroy` kullanılır.
+
+Örneğin yazarın kitapları olsun, yazar silinirse kitaplar da silinecektir.
+
+```ruby
+class Author < ApplicationRecord
+  has_many :books, dependent: :destroy
+end
+ 
+class Book < ApplicationRecord
+  belongs_to :author
+end
+```
+
+@author.destroy
+
+@author.books'larda silinecektir.
+
+---
+
+Author has many books.  
+Book belongs to author.  
+
+Author has one book.  
+Book belongs to author.
+
+---
+
+```ruby
+@book = @author.books.create(published_at: Time.now)
+```
+
+Yazarın kitaplarına yeni bir kitap oluştur.
+
+Bu şekilde ilişki kurmasaydık aşağıdaki gibi yazardık, yukardaki çok daha hoş.
+```ruby
+@book = Book.create(published_at: Time.now, author_id: @author.id)
+```
+
+---
+
+- belongs_to (ait)
+- has_one (bir tane sahip)
+- has_many (bir sürü var)
+- has_many :through (bir sürü sahip ama bişey üzerinden)
+- has_one :through (bi tane sahip ama bişey üzerinden)
+- has_and_belongs_to_many (many-to-many)
+
+---
+
+## belongs_to
+
+```ruby
+class Book < ApplicationRecord
+  belongs_to :author
+end
+```
+
+```
+ -------      belongs_to          ---------
+| books | ---------------------> | authors |
+ -------                          ---------
+ author_id
+```
+
+## has_one
+
+```ruby
+class Supplier < ApplicationRecord
+  has_one :account
+end
+```
+
+```
+ -----------                    ----------
+| suppliers | <--------------- | accounts |
+ -----------                    ----------
+ has_one :account               supplier_id
+                                belongs_to :supplier
+```
+
+## has_many
+
+```ruby
+class Author < ApplicationRecord
+  has_many :books
+end
+```
+
+```
+ -------                          ---------
+| books | ---------------------> | authors |
+ -------                          ---------
+ author_id                       has_many :books
+```
+
+## has_many :through
+
+```ruby
+class Physician < ApplicationRecord
+  has_many :appointments
+  has_many :patients, through: :appointments
+end
+ 
+class Appointment < ApplicationRecord
+  belongs_to :physician
+  belongs_to :patient
+end
+ 
+class Patient < ApplicationRecord
+  has_many :appointments
+  has_many :physicians, through: :appointments
+end
+```
+
+```
+ -----------
+| physician | <-----------|
+ -----------              |            --------------
+                          |-----------|              |
+                                      | Appointments |
+                          |-----------|              |
+ -----------              |            --------------
+| patients  | <-----------|
+ -----------
+```
+
+```ruby
+class CreateAppointments < ActiveRecord::Migration[5.0]
+  def change
+    create_table :physicians do |t|
+      t.string :name
+      t.timestamps
+    end
+ 
+    create_table :patients do |t|
+      t.string :name
+      t.timestamps
+    end
+ 
+    create_table :appointments do |t|
+      t.belongs_to :physician, index: true
+      t.belongs_to :patient, index: true
+      t.datetime :appointment_date
+      t.timestamps
+    end
+  end
+end
+```
+
+---
+
+Farklı bir örnek
+
+```ruby
+class Document < ApplicationRecord
+  has_many :sections
+  has_many :paragraphs, through: :sections
+end
+ 
+class Section < ApplicationRecord
+  belongs_to :document
+  has_many :paragraphs
+end
+ 
+class Paragraph < ApplicationRecord
+  belongs_to :section
+  has_one :document, through: :section
+end
+```
+
+---
+
+## has_one :through
+
+```ruby
+class Supplier < ApplicationRecord
+  has_one :account
+  has_one :account_history, through: :account
+end
+ 
+class Account < ApplicationRecord
+  belongs_to :supplier
+  has_one :account_history
+end
+ 
+class AccountHistory < ApplicationRecord
+  belongs_to :account
+end
+```
+
+```
+ ----------
+| supplier | <------------|
+ ----------               |            ---------
+                          |-----------|         |
+                                      | account |
+                                 |--->|         |
+ ------------------              |     ---------
+| account_history  | ------------|
+ ------------------
+```
+
+## has_and_belongs_to_many
+
+JoinTable
+
+```ruby
+class Assembly < ApplicationRecord
+  has_and_belongs_to_many :parts
+end
+ 
+class Part < ApplicationRecord
+  has_and_belongs_to_many :assemblies
+end
+```
+
+## has_one ve belongs_to farkı
+
+```ruby
+class Supplier < ApplicationRecord
+  has_one :account
+end
+ 
+class Account < ApplicationRecord
+  belongs_to :supplier
+end
+```

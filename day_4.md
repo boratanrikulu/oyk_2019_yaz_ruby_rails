@@ -1,31 +1,33 @@
-* cloudflare
+# ÖYK 2019 Ruby on Rails - Day 4
 
-request pdf için gelir ise, acceptlanguage pdf olarak, html set'lenir ise text/html olarak geri dönül yapılır.
+* *[cloudflare](https://www.cloudflare.com/)* - Örnek bir Domain Name Server
+
+Request pdf için gelir ise, accept_language pdf olarak, html set'lenir ise text/html olarak geri dönüş yapılır.
 
 ## Rack
 
 https://rack.github.io/
 
-Ruby'nin http isteklerini anlayabilmesi için araya Rack katmanı girer.
+Ruby'nin http isteklerini anlayabilmesi için araya *rack* katmanı girer.
 
 `Rack provides a minimal interface between webservers that support Ruby and Ruby frameworks.`
 
-Herhangi bir dizinde config.ru var ise o bir webserver'dır. Gelen isteklere cevap verebilir.
+Herhangi bir dizinde *config.ru* var ise o bir **webserver**'dır. Gelen isteklere cevap verebilir.
 
-proje ayaklandığında puma adında bir web sunucusu çalışır.
+Proje ayaklandığında **puma** adında bir web sunucusu çalışır.
 
 puma (application web server) (http://puma.io/)
 thin ruby webserver
 ruby unicorn
 
-config.ru
 ```ruby
+# config.ru
 require './myapp.rb'
 run myapp
 ```
 
-myapp.rb
 ```ruby
+# myapp.rb
 require 'rack'
 require "rack/handler/puma"
  
@@ -40,15 +42,15 @@ Rack::Handler::Puma.run myapp
 rackup
 ```
 
-Development'dayken app server, Production'da ise webserver kullanılır direkt olarak app server kullanılır.
+Development'dayken **app server**, Production'da ise webserver kullanılır direkt olarak app server kullanılır.
 
-Nginx statik veriler, ssl, saldırılardan sorumlu olarak ayarlanır genelde, puma ve alternatif app serverlar ise ruby kodları çalıştırmak için vs.
+**nginx** statik veriler, ssl, saldırılardan sorumlu olarak ayarlanır genelde, puma ve alternatif app serverlar ise ruby kodları çalıştırmak için vs.
 
-Nginx vbir proxy görevi görmüş olur aslında.
+Nginx aslında bir proxy görevi görmüş olur.
 
 CI
 
-Session, cookie. Sunucunun client'ı tanımasını sağlar.
+Session, cookie, sunucunun client'ı tanımasını sağlar.
 
 ## MVC
 
@@ -102,17 +104,17 @@ Session, cookie. Sunucunun client'ı tanımasını sağlar.
 		- URI
 ```
 
-FrontController adında design pattern var. MVC'lerin hepsi başlangıçta FrontController uygulayarak başlar. Bu routing ve controller class'larının ilişkili olarak çalışmasını sağlar.
+FrontController adında bir design pattern var. MVC'lerin hepsi başlangıçta FrontController uygulayarak başlar. Bu routing ve controller class'larının ilişkili olarak çalışmasını sağlar.
 
 **HTTP Request Methods** [REST ile doğrudan ilgisi var!]
 ```
 GET
 POST
-PUT/PATH
+PUT/PACTH
 DELETE
 ```
 
-FrontController root path'den sonraki alt path'leri algılar ve nereye yani hangi controller'a istek yapılması gerektiğini anlar yani dispatch yapar!
+FrontController root path'den sonraki alt path'leri algılar ve nereye yani hangi controller'a istek yapılması gerektiğini anlar, yani dispatch yapar!
 
 Yapılan http request tipine göre de controller'ın hangi method'u yani hangi action'ı çalışacağı anlaşılır.
 
@@ -129,11 +131,12 @@ Rails'de SQL sorguları model üzerinde otomatik olarak oluşturulur. Bunu ORM s
 
 Model katmanında yapılacak sorgu işlemleri yapıldıktan sonra controller view katmanınına gider.
 
-**View**
-- assets
-- layout
-- template
-- render
+### View
+
+* assets
+* layout
+* template
+* render
 
 controllers/users_controller.rb  
 views/users/index.html.erb  
@@ -158,6 +161,7 @@ Keskin bıçaklar. Standartları kendine göre değiştirebilirsin, ama bu durum
 ```
 
 ```
+
 DB (host, username, password)                       ORM (Active Record)
   -> Scheama
      -> Table   <----------------------------->  Class
@@ -188,6 +192,7 @@ Connection kurulması için
 - Adapter (driver)
 
 **Model ve Tablo karışılıkları**
+
 ```
 Model/Class            Table/Schema
 Article 	           articles
@@ -197,10 +202,10 @@ Mouse 	               mice
 Person 	               people
 ```
 
-10000000 = 10_000_000
+> 10000000 == 10_000_000
 
-Primary key  
-Foreign key
+*Primary key*  
+*Foreign key*
 
 #### Model'in yazılması
 
@@ -221,41 +226,45 @@ def name=(name) #setter method
 end
 ```
 
-User.class_methods.add(new_method) gibi birşeyler yapılabiliyor
+User.class_methods.add(new_method) gibi birşeyler yapılabiliyor.
 
-attr_reader (setter oluşturma)  
-attr_writer (getter oluşturma)  
-attr_accessor (setter ve getter oluşturma)  
+`attr_reader` (setter oluşturma)  
+`attr_writer` (getter oluşturma)  
+`attr_accessor` (setter ve getter oluşturma)  
 
 ---
 
-Eğer db'deki farklı bir tablo kullanmak, elle vermek ister isek
+Eğer db'deki farklı bir tabloyu kullanmak, ismini elle girmek istersek
+
 ```ruby
 class Product < ApplicationRecord
   self.table_name = "my_products"
 end
 ```
+
 şeklinde yapabiliriz.
 
 #### CRUD (Create, Read, Update, Delete)
 
-**Create**
+##### Create
 
 ```ruby
 user = User.new(name: "Bora", surname: "Tanrikulu")
 user.save
 ```
 
-**Read**
+##### Read
 
 ```ruby
 # return a collection with all users
 users = User.all
 ```
+
 ```ruby
 # return the first user
 user = User.first
 ```
+
 ```ruby
 # return the first user named Bora
 david = User.find_by(name: "Bora")
@@ -266,11 +275,13 @@ david = User.find_by(name: "Bora")
 users = User.where(name: 'Bora', surname: 'Tanrikulu').order(created_at: :desc)
 ```
 
-**Find** bir object dönerken, **Where** bir collection dönecektir.
+##### Find
 
-Collection, içersinde birden fazla obje saklayan yapıdır.
+Bir object dönerken, **Where** bir collection dönecektir.
 
-**Update**
+*Collection*, içersinde birden fazla obje saklayan yapıdır.
+
+##### Update
 
 ```ruby
 user = User.find_by(name: 'Bora')
@@ -287,7 +298,7 @@ user.update(name: 'Asya')
 User.update_all "max_login_attempts = 3, must_change_password = 'true'"
 ```
 
-**Delete**
+##### Delete
 
 ```ruby
 user = User.find_by(name: 'David')
@@ -352,12 +363,14 @@ class CreatePublications < ActiveRecord::Migration[5.0]
 end
 ```
 
-Migration'ı çalıştırmak
+Migration'ı çalıştırmak:
+
 ```ruby
 rails db:migrate
 ```
 
-Migration'ı geri almak
+Migration'ı geri almak:
+
 ```ruby
 rails db:rollback
 ```
@@ -366,20 +379,20 @@ rails db:rollback
 
 ## Migrations
 
-> Rails-6.0.0-rc1 ile yeni bir proje oluşturduk.
+> *Rails-6.0.0-rc1* ile yeni bir proje oluşturduk.
 
 Versiyonları tutmak için database'da schema_table oluşturuyor ve versiyonları orada saklayarak db ile migration'ları eş(sync) olup olmadığını kontrol ediyor.
 
-```ruby
+```sh
 rails db:create
 ```
 
-```ruby
+```sh
 rails generate migration CreateProducts name:string description:text
 ```
 
-**db/migrate/create_products.rb**
 ```ruby
+# db/migrate/create_products.rb
 class CreateProducts < ActiveRecord::Migration[6.0]
   def change
     create_table :products do |t|
@@ -395,8 +408,8 @@ end
 rails db:migrate
 ```
 
-**db/schema.rb**
 ```ruby
+# db/schema.rb
 ActiveRecord::Schema.define(version: 2019_07_22_151741) do
 
   create_table "products", force: :cascade do |t|
@@ -409,12 +422,12 @@ ActiveRecord::Schema.define(version: 2019_07_22_151741) do
 end
 ```
 
-```ruby
+```sh
 rails generate migration AddPartNumberToProducts part_number:string
 ```
 
-**db/migrate/add_part_number_to_products.rb**
 ```ruby
+# db/migrate/add_part_number_to_products.rb
 class AddPartNumberToProducts < ActiveRecord::Migration[6.0]
   def change
     add_column :products, :part_number, :string
@@ -426,20 +439,23 @@ end
 rails db:migrate
 ```
 
-Migration'larda geri gitmek için rollback yaparız.
+Migration'larda geri gitmek için *rollback* yaparız.
 Aşağıdaki gibi
-```ruby
+
+```sh
 ruby db:rollback
 ```
 
-Rollback yapmadan migration'ları edit'lemeyin!
+> Rollback yapmadan migration'ları edit'lemeyin!
 
-Migration'ların durumuna bakmak için
+Migration'ların durumuna bakmak için:
+
 ```ruby
 ruby db:migrate:status
 ```
 
 En son migration'ı aşağıdaki gibi yapıp tekrar migrate çekelim.
+
 ```ruby
 class AddPartNumberToProducts < ActiveRecord::Migration[6.0]
   def change
@@ -449,7 +465,7 @@ class AddPartNumberToProducts < ActiveRecord::Migration[6.0]
 end
 ```
 
-```ruby
+```sh
 rails db:migrate
 ```
 
@@ -462,11 +478,12 @@ index = performans
 ---
 
 Bir şey silmek için aşağıdaki gibi yapabiliriz
-```ruby
+
+```sh
 rails d migration AddDetailsToProducts part_number:string price:decimal
 ```
 
-```ruby
+```sh
 rails db:migrate
 ```
 
@@ -474,7 +491,7 @@ rails db:migrate
 
 Eğer bir migration'da bir çok şey ekleyecek ise ismi direkt olarak açıklayıcı bir şey yazabiliriz. Ardından elimizle migration dosyasını güncelleriz.
 
-```ruby
+```sh
 rails generate migration AddDetailsToProducts part_number:string:index price:decimal:index
 ```
 
@@ -489,7 +506,7 @@ class AddDetailsToProducts < ActiveRecord::Migration[6.0]
 end
 ```
 
-```ruby
+```sh
 rails db:migrate
 ```
 
@@ -497,7 +514,7 @@ rails db:migrate
 
 Yeni bir tablo oluşturalım.
 
-```ruby
+```sh
 rails generate migration CreateUsers name:string age:integer
 ```
 
@@ -514,7 +531,7 @@ end
 
 #### References
 
-```ruby
+```sh
 rails generate migration AddUserRefToProducts user:references
 ```
 
@@ -538,7 +555,7 @@ user_id: references
 
 Yani user_id bir foreign_key(ikincil-yabancı anahtar olacaktır.)
 
-rails'de yazarken user_id değil user yazarız.
+Rails'de yazarken user_id değil user yazarız.
 
 ```ruby
 class AddUserRefToProducts < ActiveRecord::Migration[6.0]
@@ -572,8 +589,9 @@ Many-to-many ilişki
                                            ---------
 ```
 
-Customer diye bir tablo yaratalım. Bu sefer artık bunun model'ini de oluşturmak istiyoruz. Aşağıdaki gibi oluşturalım. Bu sefer hem model hem de migration oluşturacak.
-```ruby
+Customer diye bir tablo yaratalım. Bu sefer artık bunun modelini de oluşturmak istiyoruz. Aşağıdaki gibi oluşturalım. Bu sefer hem model hem de migration oluşturacak.
+
+```sh
 rails generate model Customer first_name:string last_name:string email:string
 ```
 
@@ -587,6 +605,7 @@ create      test/fixtures/customers.yml
 ```
 
 Model generate ederek yapınca, migration oluştururken timestamp'leri de yazıverdi.
+
 ```ruby
 class CreateCustomers < ActiveRecord::Migration[6.0]
   def change
@@ -603,7 +622,7 @@ end
 
 Şimdi product ile customer arasında aratablo oluşturalım.
 
-```ruby
+```sh
 rails generate migration CreateJoinTableCustomerProduct customer product
 ```
 
@@ -618,8 +637,8 @@ class CreateJoinTableCustomerProduct < ActiveRecord::Migration[6.0]
 end
 ```
 
-JoinTable'de yalnızca foreign_key'ler olur. Eğer ek birşey eklemek istersem(oluşturma tarihi gibi vs.) jointable değil de ayrı bir model olarak yaparız.
+JoinTable'da yalnızca foreign_key'ler olur. Eğer ek bir şey eklemek istersek(oluşturma tarihi vs. gibi) jointable değil de ayrı bir model olarak yaparız.
 
-```ruby
+```sh
 rails db:migrate
 ```

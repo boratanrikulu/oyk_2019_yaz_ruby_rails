@@ -17,6 +17,7 @@ Kurs içeriği: [**`https://kamp.linux.org.tr/ruby-on-rails-ile-web-programlama`
 | 3 | Bundler,<br> Rbenv,<br> Rack,<br> Web nasıl çalışır | [**`Gün - 3`**](_data/gun_3.md) | [**`Rack sunucu örneği`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rack-example) |
 | 4 | MVC,<br> Active Record'e giriş,<br> Model,<br> Migration | [**`Gün - 4`**](_data/gun_4.md) | [**`Migration örnekleri`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/migration-example) |
 | 5 | Validation,<br> Callbacks,<br> Associations| [**`Gün - 5`**](_data/gun_5.md) | [**`Validation örnekleri`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/validation-example) |
+| 6 | Polymorphic Associations | [**`Gün - 6`**](_data/gun_6.md) | [**`Polymorphic Associations örnekleri`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/polymorphics-example) |
 
 ---
 

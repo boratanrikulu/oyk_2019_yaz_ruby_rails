@@ -235,3 +235,96 @@ comment.commentable
 ---
 
 ## Self Joins
+
+Aynı modeli farklı isimlerde kullanabilmemizi sağlar.
+
+```ruby
+class Book < ApplicationRecord 
+  belongs_to :writer, class_name: "Author", foreign_key: 'author_id'
+end
+```
+
+```ruby
+book.writer
+```
+
+En bariz örneği Follow içindir. User hem follower rolünde olacaktır hem de followed.
+
+---
+
+## Trick'ler, Uyarılar
+
+Active Record sorgu atarken cache mekanizmasını kullanır.
+
+```ruby
+author.books                 # retrieves books from the database
+author.books.size            # uses the cached copy of books
+author.books.empty?          # uses the cached copy of books
+```
+
+---
+
+Join table oluştururken aşağıdaki gibi oluşturmak yerine
+
+```ruby
+
+class CreateAssembliesPartsJoinTable < ActiveRecord::Migration[5.0]
+  def change
+    create_table :assemblies_parts, id: false do |t|
+      t.integer :assembly_id
+      t.integer :part_id
+    end
+ 
+    add_index :assemblies_parts, :assembly_id
+    add_index :assemblies_parts, :part_id
+  end
+end
+```
+
+Aşağıdaki kısayol kullanılır.
+
+```ruby
+class CreateAssembliesPartsJoinTable < ActiveRecord::Migration[5.0]
+  def change
+    create_join_table :assemblies, :parts do |t|
+      t.index :assembly_id
+      t.index :part_id
+    end
+  end
+end
+```
+
+---
+
+## Namespace
+
+Model'leri namespace'lerin altına alabiliriz.
+
+```
+- App
+  |---- Author
+        |------- Writer
+        |------- Reader
+```
+
+```ruby
+module Author
+	class Writer < ApplicationRecord
+	end
+end
+```
+
+```ruby
+module Author
+	class Reader < ApplicationRecord
+	end
+end
+```
+
+```ruby
+Author::Writer
+```
+
+```ruby
+Author::Reader
+```

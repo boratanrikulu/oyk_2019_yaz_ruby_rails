@@ -328,3 +328,221 @@ Author::Writer
 ```ruby
 Author::Reader
 ```
+
+---
+
+---
+
+Scopes
+
+---
+
+Her zaman dependent: :destroy diyerek tüm çocukları öldürmek istemeyebiliriz. Çocuğu olan herhangi bir şeyi silmemek istersek
+
+```ruby
+:restrict_with_exception causes an exception to be raised if there is an associated record
+:restrict_with_error causes an error to be added to the owner if there is an associated object
+```
+
+Eğer veriyi silmeden yalnızca kullanım dışı yapmak isterisek id'sini nil yapmamız yeterli olacaktır. Bu durumda,
+```ruby
+:nullify causes the foreign key to be set to NULL. Callbacks are not executed.
+```
+
+Destroy'da callback'ler çalışır iken delete'de çalışmaz.
+
+---
+
+author.books -> Collection döner  
+book.author -> Object(Model) döner
+
+---
+
+Collection'lara yeni bir eleman eklemek için '<<' kullanılabilir.
+
+```ruby
+author.books << Book.create(...)
+```
+
+Silmek için
+
+```ruby
+author.books.delete(Book.first)
+```
+
+---
+
+```ruby
+@book_ids = @author.book_ids
+```
+
+aynı
+
+```ruby
+@book_ids = @author.books.pluck(:id)
+```
+
+---
+
+distinct, aynı kayıttan birden fazla var ise bir tane alır
+
+```ruby
+class Person
+  has_many :readings
+  has_many :articles, -> { distinct }, through: :readings
+end
+```
+
+---
+
+## MyWeeBlog - Analiz
+
+```
+# User
+Email
+Kullanıcı Adı
+Parola
+
+# Profil
+Tam İsim
+İlk İsim
+Soy İsim
+Yaş
+
+# Post
+Body
+
+# Comment -> Post
+User
+
+# Like -> Post
+User
+
+
+Dashboard'da blog post'ları listeleyeceğiz. (son yirmi post listelenecek)
+
+Kullanıcı profile sayfası. İsim (30 adet post)
+İsme ait olanları listele
+
+Kullanıcı için ufak bir istatistik sayfası. (Toplam beğeni, toplam yorum)
+```
+
+Projeyi yaptık. Buradan bakabilirsiniz: [**`https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit)
+
+---
+
+## Query Interface
+
+**Find**
+
+```ruby
+post = Post.find(3)
+```
+
+ID'ye göre sorgu atıyor.  
+Geriye Objeye döndürür.
+
+```ruby
+posts = Post.find([1, 10])
+```
+
+**Take**
+
+Almak istediğimiz kayıt sayısını belirtiririz.
+
+```ruby
+people = Person.all.where(age: 18).take(5)
+```
+
+**First**
+
+**Last**
+
+**Order**
+
+```ruby
+posts = Post.order(:title).take(5)
+```
+
+**Find by**
+
+Obje döner. (first record, eşleşen ilk kayıt)
+
+```ruby
+post = Post.find_by(title: '1984')
+```
+
+**Find each**
+
+Toplu işlemler için.
+
+```ruby
+User.find_each do |user|
+  NewsMailer.weekly(user).deliver_now
+end
+```
+
+İşlem miktar sınırı koymak için
+
+```ruby
+User.find_each(batch_size: 5000) do |user|
+  NewsMailer.weekly(user).deliver_now
+end
+```
+
+```ruby
+User.find_each(start: 2000) do |user|
+  NewsMailer.weekly(user).deliver_now
+end
+```
+
+```ruby
+User.find_each(start: 2000, finish: 10000) do |user|
+  NewsMailer.weekly(user).deliver_now
+end
+```
+
+---
+
+**Where** birden fazla parametreye sorgu atılacak ise
+
+```ruby
+Client.where("orders_count = ? AND locked = ?", params[:orders], false)
+```
+
+```ruby
+Client.where("created_at >= :start_date AND created_at <= :end_date",
+  {start_date: params[:start_date], end_date: params[:end_date]})
+```
+
+---
+
+**Range Confitions**
+
+```ruby
+Client.where(created_at: (Time.now.midnight - 1.day)..Time.now.midnight)
+```
+
+---
+
+**Where not**
+
+```ruby
+Client.where.not(locked: true)
+```
+
+---
+
+**Order**
+
+```ruby
+Client.order(created_at: :desc)
+# OR
+Client.order(created_at: :asc)
+```
+
+---
+
+**Limit, Offset**
+
+

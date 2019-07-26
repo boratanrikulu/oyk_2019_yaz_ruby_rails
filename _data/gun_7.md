@@ -513,3 +513,95 @@ head :created, location: photo_path(@photo)
 ```
 
 ---
+
+## Assets Tags
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+	CSS JS META BİLGİLERİNİN YAZILACAĞI KISIM
+</head>
+<body>
+
+</body>
+</html>
+```
+
+Aslında JS aşağıya yazılmalıdır.
+
+Turbolinks
+
+Asset Tag Helpers
+
+- auto_discovery_link_tag
+- javascript_include_tag
+- stylesheet_link_tag
+- image_tag
+- video_tag
+- audio_tag
+
+---
+
+## javascript_include_tag
+
+Bu üç yere bakar `app/assets, lib/assets or vendor/assets`
+
+app/assets uygulammızdaki şeyleri tutar, diğerleri 3. parti şeyler
+
+```ruby
+<%= javascript_include_tag "main" %>
+```
+
+## stylesheet_link_tag
+
+```ruby
+<%= stylesheet_link_tag "main" %>
+```
+
+## image_tag
+
+```ruby
+<%= image_tag "header.png" %>
+```
+
+## video_tag
+
+```ruby
+<%= video_tag "movie.ogg" %>
+```
+
+---
+
+## yield
+
+Sayfalara bir blok atabilmemiz sağlayan yapılardır. Rails ile ilgisi yok, ruby ile ilgisi var.
+
+```html
+<html>
+  <head>
+  <%= yield :head %>
+  </head>
+  <body>
+  <%= yield %>
+  </body>
+</html>
+```
+
+## content_for
+
+Bunun sayesinde yield'lara istediğimiz veriyi aktarabiliriz.
+
+```html
+<% content_for :head do %>
+  <title>A simple page</title>
+<% end %>
+ 
+<p>Hello, Rails!</p>
+```
+
+---
+
+## Partials
+
+yield-content_for'un partial kullanımından farkı nedir?

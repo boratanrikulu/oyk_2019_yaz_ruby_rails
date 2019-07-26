@@ -604,4 +604,97 @@ Bunun sayesinde yield'lara istediğimiz veriyi aktarabiliriz.
 
 ## Partials
 
-yield-content_for'un partial kullanımından farkı nedir?
+> yield-content_for'un partial kullanımından farkı nedir?
+
+Partial olduğunu belirtmek için alt çizgi ile başlar.  
+İstenilen dizine atılabilir.  
+İstenilen yerden çağrılabilir.
+
+```ruby
+<%= render "menu" %>
+```
+
+content_for'da view içinden layout gönderilirklen partial'da direkt olarak çağrılır.
+
+Rails'in birinci silahı ActiveRecord, ikinci silahı da template'dir.
+
+---
+
+Partial'lara layout verilebilir.
+```ruby
+<%= render partial: "link_area", layout: "graybar" %>
+```
+
+---
+
+Partial'a local variable atmak aşağıdaki gibidir.
+
+new
+```ruby
+<h1>New zone</h1>
+<%= render partial: "form", locals: {zone: @zone} %>
+```
+
+form partial
+```ruby
+<%= form_for(zone) do |f| %>
+  <p>
+    <b>Zone name</b><br>
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+```
+
+---
+
+Varsayılan partial'ların kullanımı için view dosyası altında aynı isimde bir dosya oluşturmak yeterlidir. Örğine articles içersinde article partial oluşturularak direkt olarak aşağıdaki gibi kullanılır.
+
+```ruby
+<%= render user.articles %>
+```
+
+Yukardaki kod user.articles collection'nın bir döngüye girecek ve her defasında article partial'a giderek koyacaktır.
+
+
+Bu aslında aşağıdaki kullanımın kısaltılmış halidir.
+
+```ruby
+<%= render partial: 'product', collection: @published_products, as: :product, locals: {...} %>
+```
+
+---
+
+render'lamak için farklı tipler de kullanılabilir.
+
+```ruby
+<h1>Contacts</h1>
+<%= render [customer1, employee1, customer2, employee2] %>
+```
+
+---
+
+```ruby
+<h1>Products</h1>
+<%= render(@products) || "There are no products available." %>
+```
+
+---
+
+Space Template
+
+Her döngüde araya bir başka template eklemek için spacer kullanır.
+
+```ruby
+<%= render partial: @products, spacer_template: "product_ruler" %>
+```
+
+---
+
+Şimdi öğrendiğimiz bilgileri test etmek amacıyla Rubit uygulamasına devam ediyoruz.
+
+[https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit)
+
+---

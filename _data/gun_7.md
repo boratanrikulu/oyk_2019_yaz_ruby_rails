@@ -245,3 +245,271 @@ Explain ile sorguya bir tablo dönebilir.
 ```ruby
 User.where(id: 1).joins(:articles).explain
 ```
+
+# Layouts and Rendering(View)
+
+User intreface kısmını oluşturduğumuz bölüm.
+
+Template  
+HTML  
+Önyüz  
+UI
+
+```
+ ----                                 İSTEK
+| DB |                               /
+ ----                               /
+  ||                        --------
+  ||                       | Router |
+ -------                    --------
+| Model |                /
+ -------                /
+   \\                  /
+    \\                /
+     \\   ------------               ------
+      \\ | Controller | <---------> | View |
+          ------------               ------
+```
+
+## Render
+
+En önemli araç.
+
+Render yapıldığında bir **response** oluşturulur.
+
+Convention over Configuration.
+
+Controller'ın adı ne ise view'da da öyle olur. Default olarak orası render edilir.
+
+```
+index.html.erb
+ |     |     |
+isim uzantı derleyici
+```
+
+index.css.erb, index.js.erb vs de olabilirdi.
+
+çıktının ekranda gözükmesi için `<%= %>`, sadece çalışması için `<% %>`
+
+---
+
+Render controller'da action'ların view'lerini render'lar. Default olarak aynı isimdeki dosyayı render'lar.
+
+```ruby
+def update
+  @book = Book.find(params[:id])
+  if @book.update(book_params)
+    redirect_to(@book)
+  else
+    render "edit"
+  end
+end
+```
+
+Her action bir view üretecek diye bir şey yok. Çıktı üreten ve çıktı üretmeyen(bir işlem yapıp yönlendiren) action'lar vardır.
+
+---
+
+Rails'de view dosyalarına template denir
+
+---
+
+```ruby
+
+render :edit
+render action: :edit
+render "edit"
+render "edit.html.erb"
+render action: "edit"
+render action: "edit.html.erb"
+render "books/edit"
+render "books/edit.html.erb"
+render template: "books/edit"
+render template: "books/edit.html.erb"
+```
+
+---
+
+## İnline
+
+Direkt olarak inline yazabilmemizi sağlar.
+
+```ruby
+render inline: "<% products.each do |p| %><p><%= p.name %></p><% end %>"
+```
+
+## Plain
+
+Plain, raw data olarak dönmek için kullanılır.
+
+```ruby
+render plain: "OK"
+```
+
+## Json
+
+```ruby
+render json: @product
+```
+
+## XML
+
+```ruby
+render xml: @product
+```
+
+## JS
+
+JS dönebiliriz. Bunu döndüğümüzde browser anlayıp otomatik olarak çalıştırır.
+
+```ruby
+render js: "alert('Hello Rails');"
+```
+
+```
+This will send the supplied string to the browser with a MIME type of text/javascript.
+```
+
+**MIME type**
+
+hangi tipte veri olduğunu belirtir.
+
+## Render için seçenekler
+
+- content_type
+- layout
+- location
+- status
+- formats
+
+**content_type**
+
+```ruby
+render file: filename, content_type: "application/rss"
+```
+
+**layout**
+
+```ruby
+render layout: "special_layout"
+```
+
+```ruby
+render layout: false
+```
+
+**location**
+
+```ruby
+render xml: photo, location: photo_url(photo)
+```
+
+**status**
+
+sunucunun dönen veri hakkında verdiği açıklayıcı bilgi.
+
+```ruby
+render status: 500
+render status: :forbidden
+```
+
+**variant**
+
+```ruby
+ruby variants: [:mobile, :desktop]
+```
++
+```
+views/home/index.html+mobile.erb
+views/home/index.html+desktop.erb
+views/home/index.html.erb
+```
+
+Eğer farklılıklar ufak ölçekte ise direkt olarak CSS ile yapabiliriz. Ama tasarım büyük ölçüde değişiyor ise bu durumda variant kullanmamız gerekiyor. Yani Mobile'de başka bir sayfa, desktop'da farklı bir sayfa gösteriyorsak bunu variant ile yapabiliriz.
+
+---
+
+## Layout
+
+Sayfanın bütünün gösterildiği kısımdır aslında.
+
+Her sayfada aynı kalan, değişmeyen kısımlar genellikle layout'a taşınır.
+
+Default olarak ApplicationLayout bulunur.
+
+Controller'da layout'ı ayarlamak için
+```ruby
+class ProductsController < ApplicationController
+  layout "inventory"
+end
+```
+
+Duruma göre farklı layout kullanmak için
+```ruby
+class ProductsController < ApplicationController
+  layout :products_layout
+ 
+  def show
+    @product = Product.find(params[:id])
+  end
+ 
+  private
+    def products_layout
+      @current_user.special? ? "special" : "products"
+    end
+ 
+end
+```
+
+Action'a göre farklı layout için
+```ruby
+class ProductsController < ApplicationController
+  layout "product", only: [:index, :show]
+end
+```
+
+Layout kullanmak için
+```ruby
+class OldArticlesController < SpecialArticlesController
+  layout false
+end
+```
+
+## Redirect_to
+
+Render'dan farklı olarak bunda farklı bir controller-action'a istek aktarılır-atılır.
+
+## Flash
+
+Hata mesajları bastırmak için flash kullanılır.
+
+Flash mesajları kullanıldığı an mesajı bellekten siler.
+
+```ruby
+def index
+  @books = Book.all
+end
+ 
+def show
+  @book = Book.find_by(id: params[:id])
+  if @book.nil?
+    @books = Book.all
+    flash.now[:alert] = "Your book was not found"
+    render "index"
+  end
+end
+```
+
+## Head Request
+
+API yazarken head request yazmamız gerekebilir.
+
+```ruby
+head :bad_request
+```
+
+```ruby
+head :created, location: photo_path(@photo)
+```
+
+---

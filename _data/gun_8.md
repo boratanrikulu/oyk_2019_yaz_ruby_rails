@@ -683,3 +683,44 @@ destroy
 aaaa_url -> tüm url  (http://a.com:3000/hehehe)  
 aaaa_path -> yalnızca path kısmı (/hehehe)
 
+---
+
+Eğer RESTFUL yapacaksak, CRUD yapacaksak direkt olarak resources helper'ını kullanabiliriz.
+
+```ruby
+resources :birkelime
+```
+
+```
+birkelime_index GET    /birkelime(.:format)           birkelime#index
+                POST   /birkelime(.:format)           birkelime#create
+  new_birkelime GET    /birkelime/new(.:format)       birkelime#new
+ edit_birkelime GET    /birkelime/:id/edit(.:format)  birkelime#edit
+      birkelime GET    /birkelime/:id(.:format)       birkelime#show
+                PATCH  /birkelime/:id(.:format)       birkelime#update
+                PUT    /birkelime/:id(.:format)       birkelime#update
+                DELETE /birkelime/:id(.:format)       birkelime#destroy
+```
+
+only sayesinde istediğimiz action'ların yaratılmasını sağayalabiliriz.
+
+```ruby
+resources :birkelime, only: [:index, :show]
+```
+
+```
+birkelime_index GET    /birkelime(.:format)           birkelime#index
+      birkelime GET    /birkelime/:id(.:format)       birkelime#show
+```
+
+---
+
+| HTTP  Verb | Path | Controller#Action | Used for |
+|:----------:|:----:|:-----------------:|:--------:|
+| GET  | /photos | photos#index | display a list of all photos |
+| GET  | /photos/new | photos#new | return an HTML form for creating a new photo |
+| POST | /photos | photos#create | create a new photo |
+| GET  | /photos/:id | photos#show | display a specific photo |
+| GET  | /photos/:id/edit | photos#edit | return an HTML form for editing a photo |
+| PATCH/PUT |  /photos/:id | photos#update | update a specific photo |
+| DELETE | /photos/:id | photos#destroy | delete a specific photo |

@@ -606,4 +606,80 @@ Controller'da anlatılan kavramlar
 - Before Action vs.
 - Redirect to
 - Flash
-- 
+
+# Routing
+
+```
+ ----                                 İSTEK
+| DB |                               /
+ ----                               /
+  ||                        --------
+  ||                       | Router |
+ -------                    --------
+| Model |                /
+ -------                /
+   \\                  /
+    \\                /
+     \\   ------------               ------
+      \\ | Controller | <---------> | View |
+          ------------               ------
+```
+
+```
+             REST
+URL        /posts/new
+ |         /posts/index     
+ |------------|-----|
+        Controller  Action
+
+|___________________________|
+      FrontController
+          DesignPattern        
+
+```
+
+Router'in yaptığı iç controller'ın ilgili action'nına yönlendirmektir.
+
+Path'e, Method'a, Parametrelere bakarak nereye gidilmesi gerektiğine karar verir.
+
+---
+
+Bir GET isteği yapılmış, bunu yönlendirmeyi sağlar.
+
+```ruby
+get '/patients/:id', to: 'patients#show', as: 'patient'
+   |----------------|   |---------------|    |----------|
+       PATTERN          CONTROLLER/ACTION    patient_path(id)
+                                                  |
+                                                  v
+                                              /patients/:id   
+```
+
+as'i yazmaz isek otomatik olarak pattern'den yaratılır.  
+
+```ruby
+<%= link_to 'Patient Record', patient_path(@patient) %>
+```
+
+Standart, restful dışında bir pattern yazarsanız otomatik olarak helper yaratmaz.
+
+---
+
+Rails Ujs özelliği ile herşeyi post gibi çalıştırır arka planda yakalar
+
+---
+
+**Restful**  
+index  
+show  
+new  
+create  
+edit  
+update  
+destroy
+
+---
+
+aaaa_url -> tüm url  (http://a.com:3000/hehehe)  
+aaaa_path -> yalnızca path kısmı (/hehehe)
+

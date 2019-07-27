@@ -698,3 +698,9 @@ Her döngüde araya bir başka template eklemek için spacer kullanır.
 [https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit)
 
 ---
+
+Turbolinks sayesinde tüm linkler ajax isteği gibi çalışır.  
+Native yazar gibi yapabilmemizi sağlar.
+
+https://www.youtube.com/watch?v=SWEts0rlezA
+

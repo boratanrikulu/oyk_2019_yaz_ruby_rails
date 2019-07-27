@@ -724,3 +724,104 @@ birkelime_index GET    /birkelime(.:format)           birkelime#index
 | GET  | /photos/:id/edit | photos#edit | return an HTML form for editing a photo |
 | PATCH/PUT |  /photos/:id | photos#update | update a specific photo |
 | DELETE | /photos/:id | photos#destroy | delete a specific photo |
+
+---
+
+## Çoğul
+
+```ruby
+resources :photos
+resources :books
+resources :videos
+```
+
+## Tekil
+
+```ruby
+resource :geocoder
+```
+
+---
+
+## Namespace
+
+/controllers/admin/articles/
+```ruby
+namespace :admin do
+  resources :articles, except: :index
+end
+
+resources :articles, only: :index
+```
+
+## Scope
+
+Bir de scope diye bir şey var. Url'lerin değişmesini istemediğimizde ama modüle (kapsüle) almak istediğimizde uygularız. Linkler aynı kalır ama modüle taşırız.
+
+/controllers/admin/users, path'ler yalın olarak
+```ruby
+scope module: 'admin' do
+  resources :users
+end
+```
+
+## Nested Resources
+
+Magazine'lerin her zaman publisher, photo'ların da her zaman magazine'e ihtiyacı olduğu durumlarda nested resources kullanılır.
+
+```ruby
+resources :publishers do
+  resources :magazines do
+    resources :photos
+  end
+end
+```
+
+Yukardaki kod aşağıdaki yönlendirmeleri yaratacaktır.
+
+```ruby
+    publisher_magazine_photos GET    /publishers/:publisher_id/magazines/:magazine_id/photos(.:format)           photos#index
+                              POST   /publishers/:publisher_id/magazines/:magazine_id/photos(.:format)           photos#create
+ new_publisher_magazine_photo GET    /publishers/:publisher_id/magazines/:magazine_id/photos/new(.:format)       photos#new
+edit_publisher_magazine_photo GET    /publishers/:publisher_id/magazines/:magazine_id/photos/:id/edit(.:format)  photos#edit
+     publisher_magazine_photo GET    /publishers/:publisher_id/magazines/:magazine_id/photos/:id(.:format)       photos#show
+                              PATCH  /publishers/:publisher_id/magazines/:magazine_id/photos/:id(.:format)       photos#update
+                              PUT    /publishers/:publisher_id/magazines/:magazine_id/photos/:id(.:format)       photos#update
+                              DELETE /publishers/:publisher_id/magazines/:magazine_id/photos/:id(.:format)       photos#destroy
+          publisher_magazines GET    /publishers/:publisher_id/magazines(.:format)                               magazines#index
+                              POST   /publishers/:publisher_id/magazines(.:format)                               magazines#create
+       new_publisher_magazine GET    /publishers/:publisher_id/magazines/new(.:format)                           magazines#new
+      edit_publisher_magazine GET    /publishers/:publisher_id/magazines/:id/edit(.:format)                      magazines#edit
+           publisher_magazine GET    /publishers/:publisher_id/magazines/:id(.:format)                           magazines#show
+                              PATCH  /publishers/:publisher_id/magazines/:id(.:format)                           magazines#update
+                              PUT    /publishers/:publisher_id/magazines/:id(.:format)                           magazines#update
+                              DELETE /publishers/:publisher_id/magazines/:id(.:format)                           magazines#destroy
+                   publishers GET    /publishers(.:format)                                                       publishers#index
+                              POST   /publishers(.:format)                                                       publishers#create
+                new_publisher GET    /publishers/new(.:format)                                                   publishers#new
+               edit_publisher GET    /publishers/:id/edit(.:format)                                              publishers#edit
+                    publisher GET    /publishers/:id(.:format)                                                   publishers#show
+                              PATCH  /publishers/:id(.:format)                                                   publishers#update
+                              PUT    /publishers/:id(.:format)                                                   publishers#update
+                              DELETE /publishers/:id(.:format)                                                   publishers#destroy
+```
+
+Resources parametreleri yine çalışabilirdir.
+
+```ruby
+resources :publishers, only: [:index, :new, :create] do
+  resources :magazines, only: [:index, :show] do
+    resources :photos, only: [:index]
+  end
+end
+```
+
+```ruby
+publisher_magazine_photos GET    /publishers/:publisher_id/magazines/:magazine_id/photos(.:format)   photos#index
+      publisher_magazines GET    /publishers/:publisher_id/magazines(.:format)                       magazines#index
+       publisher_magazine GET    /publishers/:publisher_id/magazines/:id(.:format)                   magazines#show
+               publishers GET    /publishers(.:format)                                               publishers#index
+                          POST   /publishers(.:format)                                               publishers#create
+            new_publisher GET    /publishers/new(.:format)                                           publishers#new
+
+```

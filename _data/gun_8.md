@@ -205,3 +205,405 @@ private
     params.require(:user).permit(:name, profile_attributes: [:first_name, :last_name])
   end
 ```
+
+---
+
+# Action Controller
+
+Controller isimleri çoğul.  
+
+```ruby
+class ClientsController < ApplicationController
+  def new
+  end
+end
+```
+
+```ruby
+get '/clients/:status', to: 'clients#index'
+```
+
+params[:status]
+
+---
+
+path'in önüne bir şey koymak için
+
+```ruby
+def default_url_options
+  { locale: I18n.locale }
+end
+```
+
+### Strong Parameters
+
+Controller'da belirli parametreleri kullanmak içindir. Başka gelir ise işleme almaz. Güvenlik için.
+
+Örneğimize devam edip strong params'ı uygulayalım.
+
+```ruby
+class PostsController < ApplicationController
+  def index
+    @posts = Post.latest_posts
+  end
+
+  def show
+    @post = Post.find(params[:id])
+  end
+
+  def new
+    @post = Post.new
+  end
+
+  def create
+    @post = Post.create(posts_params)
+    redirect_to post_path(@post)
+  end
+
+  private
+
+    def posts_params
+      params.require(:post)
+            .permit(:body)
+    end
+end
+```
+
+[https://gist.github.com/peternixey/1978249](https://gist.github.com/peternixey/1978249)
+
+---
+
+# Session
+
+Session server'da, cookie user'da olur.
+
+Default olarak session için oluşturulan cookie'ler user'da tutulur.
+
+Cookie'e 4kb'den fazla boyutta veri yazılmaz.
+
+Eğer daha büyük bir şey tutmak için ActiveRecordStore'da tutulur yani db'de tutulur cookie.
+
+Bir değişken set'lemekten farkı yok
+
+Cookie olarak default olarak oluşturulmuş session cookie ile server'deki session'nı karşılaştırır. Temelde session ve cookie birbirine benzese de farklıdır aslında.
+
+```ruby
+class LoginsController < ApplicationController
+  # "Create" a login, aka "log the user in"
+  def create
+    if user = User.authenticate(params[:username], params[:password])
+      # Save the user ID in the session so it can be used in
+      # subsequent requests
+      session[:current_user_id] = user.id
+      redirect_to root_url
+    end
+  end
+end
+```
+
+Current user var ise döndür, yok ise db'den bulup yolla, session'a yazılan değeri kullanarak.
+```ruby
+class ApplicationController < ActionController::Base
+ 
+  private
+ 
+  # Finds the User with the ID stored in the session with the key
+  # :current_user_id This is a common way to handle user login in
+  # a Rails application; logging in sets the session value and
+  # logging out removes it.
+  def current_user
+    @_current_user ||= session[:current_user_id] &&
+      User.find_by(id: session[:current_user_id])
+  end
+end
+```
+
+Logout olurken session'lar öldürülür, cookie'ler silinir.
+
+```ruby
+class LoginsController < ApplicationController
+  # "Delete" a login, aka "log the user out"
+  def destroy
+    # Remove the user id from the session
+    session.delete(:current_user_id)
+    # Clear the memoized current user
+    @_current_user = nil
+    redirect_to root_url
+  end
+end
+```
+
+Bu işlemleri otomatik olarak yapmak için devise diye bir gem var.
+
+[https://github.com/plataformatec/devise](https://github.com/plataformatec/devise)
+
+---
+
+# Flash
+
+flash'ları setlemek için
+```ruby
+redirect_to root_url, notice: "You have successfully logged out."
+redirect_to root_url, alert: "You're stuck here!"
+redirect_to root_url, flash: { referral_code: 1234 }
+```
+
+flash'ları göstermek için
+```ruby
+<html>
+  <!-- <head/> -->
+  <body>
+    <% flash.each do |name, msg| -%>
+      <%= content_tag :div, msg, class: name %>
+    <% end -%>
+ 
+    <!-- more content -->
+  </body>
+</html>
+```
+
+---
+
+# Cookies
+
+```ruby
+cookies[:test_cookie] = "cookieeeeeee"
+```
+
+```ruby
+class CommentsController < ApplicationController
+  def new
+    # Auto-fill the commenter's name if it has been stored in a cookie
+    @comment = Comment.new(author: cookies[:commenter_name])
+  end
+ 
+  def create
+    @comment = Comment.new(params[:comment])
+    if @comment.save
+      flash[:notice] = "Thanks for your comment!"
+      if params[:remember_name]
+        # Remember the commenter's name.
+        cookies[:commenter_name] = @comment.author
+      else
+        # Delete cookie for the commenter's name cookie, if any.
+        cookies.delete(:commenter_name)
+      end
+      redirect_to @comment.article
+    else
+      render action: "new"
+    end
+  end
+end
+```
+
+Cookie'yı şifrelenmiş olarakta tutabiliriz.
+
+```ruby
+class CookiesController < ApplicationController
+  def set_cookie
+    cookies.encrypted[:expiration_date] = Date.tomorrow # => Thu, 20 Mar 2014
+    redirect_to action: 'read_cookie'
+  end
+ 
+  def read_cookie
+    cookies.encrypted[:expiration_date] # => "2014-03-20"
+  end
+end
+```
+
+---
+
+# Render
+
+controllerde xml, json gibi verileri render'layabiliriz.
+
+Gelen isteğe göre aşağıdaki gibi manüpile edebiliriz.
+
+localhost:3000/posts.json gibi adrese gidildiğinde aşağıdaki gibi döneriz.
+
+```ruby
+class UsersController < ApplicationController
+  def index
+    @users = User.all
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render xml: @posts }
+      format.json { render json: @posts }
+      format.pdf { render plain: @posts }
+    end
+  end
+end
+```
+
+---
+
+Cookie örnekleri.
+
+```ruby
+class UsersController < ApplicationController
+  def index
+  end
+
+  def create_cookie
+    session[:name] = params[:name]
+    redirect_to users_path
+  end
+
+  def delete_cookie
+    session[:name] = nil
+    redirect_to users_path
+  end
+
+  private
+
+    def user_params
+      params.require(:user)
+            .permit(:email)
+    end
+end
+```
+
+```ruby
+<% if session[:name] %>
+  <h1>
+    <%= "Hey #{cookies[:name]}" %>
+  </h1>
+  <%= link_to 'Cookie Sil', users_delete_cookie_path, method: :post %>
+<% else %>
+  <h1>Hadi adını söyle</h1>
+  <%= form_with url: users_create_cookie_path, method: :post do |form| %>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+    <%= form.submit %>
+  <% end %>
+<% end %>
+```
+
+```ruby
+post 'users/create_cookie', to: 'users#create_cookie'
+post 'users/delete_cookie', to: 'users#delete_cookie'
+```
+
+---
+
+Sayı artırmak
+
+```ruby
+class UsersController < ApplicationController
+  def index
+    cookies[:count] = cookies[:count].to_i.next
+  end
+end
+```
+
+Application Layout
+```ruby
+<%= "Sayaç: #{cookies[:count]}" %>
+```
+
+---
+
+# Filters
+
+Filtreler 'before', 'after' ve 'around' olarak çalışabilir.
+
+```ruby
+class ApplicationController < ActionController::Base
+  before_action :require_login
+ 
+  private
+ 
+  def require_login
+    unless logged_in?
+      flash[:error] = "You must be logged in to access this section"
+      redirect_to new_login_url # halts request cycle
+    end
+  end
+end
+```
+
+Örneğin sayaç methodu için bu uygulanabilir.
+
+Sayı artırmak
+
+```ruby
+class UsersController < ApplicationController
+  before_action :increase_count, only: :index
+
+  def index
+  end
+
+  private
+
+    def increase_count
+      cookies[:count] = cookies[:count].to_i.next
+    end
+end
+```
+
+**Around kullanımı**
+
+```ruby
+class ChangesController < ApplicationController
+  around_action :wrap_in_transaction, only: :show
+ 
+  private
+ 
+  def wrap_in_transaction
+    ActiveRecord::Base.transaction do
+      begin
+        yield
+      ensure
+        raise ActiveRecord::Rollback
+      end
+    end
+  end
+end
+```
+
+# Request
+
+```ruby
+request.host
+request.format
+request.method
+```
+
+# Response
+
+```ruby
+response.headers["Content-Type"] = "application/pdf"
+```
+
+---
+
+# HTTP Authentications
+
+```ruby
+class AdminsController < ApplicationController
+  http_basic_authenticate_with name: "humbaba", password: "5baa61e4"
+end
+```
+
+---
+
+eğer log'a bazı attribute'lerin basılmasını istemiyor isek
+```ruby
+config.filter_parameters << :password
+```
+
+---
+
+Controller'da anlatılan kavramlar
+- Action
+- Cookie
+- Session
+- Params
+- Strong Params
+- Response ve Request objeleri
+- Respond_to
+- Format
+- Before Action vs.
+- Redirect to
+- Flash
+- 

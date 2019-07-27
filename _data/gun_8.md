@@ -75,7 +75,7 @@ Bu helper'ın hepsi tüm tarayıcılar tarafından desteklenmeyebilir. Kullanır
 posts_controller
 ```ruby
   def new
-  	@post = Post.new
+    @post = Post.new
   end
 ```
 
@@ -100,7 +100,7 @@ Artık modele göre ne yapmak istediğimiz otomatik anlayacak. Örneğin biz bo�
 create action'da oluşturalım.
 ```ruby
 def create
-	render json:params
+  render json:params
 end
 ```
 
@@ -120,8 +120,8 @@ Form'un girdi değerlerini de model etkiketi içinde çalışacak şekilde yapal
 Form
 ```ruby
 <%= form_with model: @post, local: true do |form| %>
-	<%= form.text_field :title %>
- 	<%= form.submit "Search" %>
+  <%= form.text_field :title %>
+  <%= form.submit "Search" %>
 <% end %>
 ```
 

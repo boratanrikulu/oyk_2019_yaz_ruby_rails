@@ -20,7 +20,7 @@ Kurs içeriği: [**`https://kamp.linux.org.tr/ruby-on-rails-ile-web-programlama`
 | 6 | Polymorphic Associations, Query Interface | [**`Gün - 6`**](_data/gun_6.md) | [**`Polymorphic Associations örnekleri`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/polymorphics-example) |
 | 7 | Query Interface Devamı, Layouts and Rendering(View) | [**`Gün - 7`**](_data/gun_7.md) | [**`Rubit`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit) |
 | 8 | Form Helpers, Session-Cookie, Filters, Routing | [**`Gün - 8`**](_data/gun_8.md) | [**`Rubit`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit) |
-| 9 | Routing, Active Support, Action Mailer, Active Storage | [**`Gün - 9`**](_data/gun_9.md) | &bull; |
+| 9 | Routing, Active Support, Action Mailer, Asset Pipeline, Stimulus, JavaScript, Turbolinks | [**`Gün - 9`**](_data/gun_9.md) | &bull; |
 
 ---
 

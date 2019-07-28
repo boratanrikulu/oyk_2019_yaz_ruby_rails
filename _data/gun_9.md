@@ -529,6 +529,181 @@ config.action_mailer.smtp_settings = {
 
 Test amaçlı Mailtrap kullanılabilir.
 
-# Active Storage
+# Asset Pipeline
 
+Rails 6 ile birlikte Asset Pipile'nin yerini Webpacker almaya başladı.
 
+Webpacker'de assets dizininde bulunmaz. Direkt app'in altında bulunur.
+
+Asses Pipeline'da ise assests/javascript, asset/stylesheet, asset/images
+
+---
+
+## image_tag
+
+app/assets/images
+```ruby
+<%= image_tag "rails.png" %>
+```
+
+image_tag kullanınca gösterim sırasında fotoğraf adına bir hash ekler. Bunun amacı cache'leye bilmesi içindir. Fotoğraf değişince hash'de değişir fotoğrafın değiştiğini anlamış olur.
+
+css içinde ruby kodu çalıştırmak için .css.erb demek yeterli olur. Örneğin css'de arkaplan fotoğrafı ekleyeceğimizde bunu kullanırız.
+
+```css
+.class { background-image: url(<%= asset_path 'image.png' %>) }
+```
+
+---
+
+Normal şartlarda veriler asset altındayken proje ayağa kalacapında sıkılaştırılarak public'e atılır.
+
+```ruby
+RAILS_ENV=production rails assets:precompile
+```
+
+---
+
+webpack ile react, stimulus gibi şeylerin direkt olarak kurulmasını sağlayabiliriz.
+
+```ruby
+# Rails 5.1+
+rails new myapp --webpack=react
+```
+
+Hali hazırdaki bir projeye kurmak için
+```ruby
+rails webpacker:install:stimulus
+```
+
+---
+
+SPA (single page app) framework'lerinden rails'e en yakını ember.js (https://emberjs.com/)
+
+---
+
+# Stimulus.js
+
+Projemize kuralım.
+```ruby
+rails webpacker:install:stimulus
+```
+
+Bunu yaptığımızda javascripts/ klasörüne controllers diye bir klasör geldi.
+
+içersinde hello_controller.js
+```js
+import { Controller } from "stimulus"
+
+export default class extends Controller {
+  static targets = [ "output" ]
+
+  connect() {
+    this.outputTarget.textContent = 'Hello, Stimulus!'
+  }
+}
+```
+
+Users/new'e yaptığımızda hello controller'ı çalışacak ve output controller set'lendiği gibi gözükecek.
+```html
+<!--HTML from anywhere-->
+<h2>Stimulus</h2>
+<div data-controller="hello">
+	<span data-target="hello.output">
+  </span>
+</div>
+```
+
+Alert diye bir method ekleyip bir button koyarsak.
+
+```js
+import { Controller } from "stimulus"
+
+export default class extends Controller {
+  static targets = [ "output" ]
+
+  connect() {
+    this.outputTarget.textContent = 'Hello, Stimulus!'
+  }
+
+  alert() {
+  	alert('Alerrrrtttttttt!')
+  }
+}
+```
+
+```html
+<div data-controller="hello">
+  <span data-target="hello.output">
+  </span>
+  
+  <button data-action="click->hello#alert">
+    Alert
+  </button>
+</div>
+```
+
+# Rails'de JavaScript
+
+Rails javascript isteklerini halletmek için Unobtrusive JavaScript denen bir teknik kullanır.
+
+```html
+<input type="checkbox"
+       data-remote="true"
+       data-url="<%= welcome_path %>"
+       data-params="id=10&another=2"
+       data-method=put
+```
+
+...   
+...   
+...  
+...  
+
+Bu kısmın notunu alamadım. [https://edgeguides.rubyonrails.org/working_with_javascript_in_rails.html](https://edgeguides.rubyonrails.org/working_with_javascript_in_rails.html)
+
+Basitçe ajax atma örneği yapıldı.
+
+---
+
+Stimulus kullanarak kullanıcıdan dil set'lettirme örneğini yaptık.
+
+---
+
+# Turbolinks
+
+Temelini GitHub'ın eski ceo'su atıyor. Basecamp'ciler alıp devam ettiriyor.
+
+Sayfanın yüklenme hızını artırır. Her sayfaya girildiğinde html/css yenilenmesinin önüne geçmiş olur.
+
+IOS ve Android adaptörleri var. native gibi uygulama yazılabilir.
+
+Android versiyonu şuan geliştirilmiyor.!
+
+---
+
+Mobil tarafına değil web tarafına bakıcaz.
+
+---
+
+GitHub'da da kullanılıyor.
+
+---
+
+Tüm link'ler sanki ajaxmış gibi çalışır.
+
+**Sadece değişen kısımlar güncellenir.**
+
+---
+
+History'da kalınan yerleri filan da tutar.
+
+Turbolinks tarayıcının cache mekanizmasını yönetir.
+
+Sürekli ajax isteği attığı için kendi içinde bir yükleme barı gösterir.
+
+---
+
+Rails'de form'ları ajax haline getirilirse, hedeftedi action'da js.erb kullanılmasına gerek kalmaz. Direkt redirect_to yapılır geri kalanı turbolinks otomatik olarak halleder.
+
+---

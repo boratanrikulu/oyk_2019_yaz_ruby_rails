@@ -334,4 +334,201 @@ d.end_of_week(:sunday)       # => Sat, 08 May 2010
 
 # Rails Internationalization (I18n) API
 
+```
+Internationalization
+|------------------|
+
+I   18 tane harf   n
+```
+
+Arayüz Çevirileri,  
+URL Çevirileri
+
+işlerini yapar. Kayıt çevirileri başka bir şeydir. Onun i18n ile ilgisi yok.
+
+config/locales/en.yml
+
+key-value şeklinde bir dosya. çevirilerimizi bu dosyaya yazıyoruz.
+
+```ruby
+en:
+  hello: 'hello'
+```
+
+Kullanacağımız zaman da `t('hello')` şeklinde kullanırız.
+
+bunun türkçe çevirisi yapmak için de config/locales/tr.yml dosyasında
+
+```ruby
+tr:
+  hello: 'merhaba'
+```
+
+Artık sistemin dili ing ise hello, türkçe ise merhaba yazacaktır.
+
+Dili set'lemek için application.rb'ye direkt olarak `config.i18.default_locale = :tr` yazabilirdik. Ama bundan sonra server aç kapa yapmak vs. gerekiyor, pek kullanılabilir bir yol değil.
+
+Bunun için application controller'a ir method ekleriz.
+
+kullanıcı artık localhost:3000?locale=tr path'ine giderse tr görecektir. Ama her defasında basmasını bekleyemeyiz, bundan dolayı cookie'ye yazmamız gerekecek kullanıcının tercihini.
+
+---
+
+URL'den dil tercihini almak için.
+
+Application controller default url option set'leriz.
+
+```ruby
+def default_url_options
+  { locale: I18n.locale }
+end
+```
+
+Tüm controller'i bir scope'a almak için application controller'ı scope alıyoruz.
+
+```ruby
+Rails.application.routes.draw do
+  scope "/:locale" do
+    # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+    # Post actions
+    resources :posts
+    resources :users
+    resources :birkelime
+
+  	resources :publishers, only: [:index, :new, :create] do
+  	  resources :magazines, only: [:index, :show] do
+  	    resources :photos, only: [:index]
+  	  end
+  	end
+
+    resources :photos do
+      collection do
+        get 'search'
+      end
+    end
+
+    post 'users/create_session', to: 'users#create_session'
+    post 'users/delete_session', to: 'users#delete_session'
+  end
+end
+
+```
+
+---
+
+Kullanıcıdan alınan tercihi link üzerinden cookie'e setlettirmeye bakman lazım.
+
+---
+
+Çeviriler'de değişkenler kullanılabilir.
+
+```ruby
+tr:
+	hello: "Hello %{name}"
+```
+
+```ruby
+t('hello', name: 'bora')
+```
+
+---
+
+### Date Time Çevirileri
+
+Bunun için direkt olarak rails-i18n gem'ini kurabiliriz. İçersinde bir çok dil var.
+
+```ruby
+<%= l Time.now, format: :long %>
+```
+
+---
+
+### Model Katmanındaki şeylerin çevrilmesi
+
+Model isimleri, hata mesajları vs.. filan hepsini çevirebiliriz.
+
+```ruby
+en:
+  activerecord:
+    models:
+      user:
+        one: Customer
+        other: Customers
+```
+
+# Action Mailer
+
+Uygulama üzerinden mail atmak istediğimizde kullanıyoruz. Örneği bir kullanıcı kayıt olduğunda onaylama epostası gideceğinde kolayca eposta yollayabilmemizi sağlar.
+
+Eposta yollayıcının yaratılması
+```ruby
+rails generate mailer UserMailer
+```
+
+```ruby
+# app/mailers/application_mailer.rb
+class ApplicationMailer < ActionMailer::Base
+  default from: "from@example.com"
+  layout 'mailer'
+end
+ 
+# app/mailers/user_mailer.rb
+class UserMailer < ApplicationMailer
+end
+```
+
+Eposta'nın yollanma aşaması
+```ruby
+class UserMailer < ApplicationMailer
+  default from: 'notifications@example.com'
+ 
+  def welcome_email
+    @user = params[:user]
+    @url  = 'http://example.com/login'
+    mail(to: @user.email, subject: 'Welcome to My Awesome Site')
+  end
+end
+```
+
+View dosyasının oluşturulması
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Welcome to example.com, <%= @user.name %></h1>
+    <p>
+      You have successfully signed up to example.com,
+      your username is: <%= @user.login %>.<br>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%= @url %>.
+    </p>
+    <p>Thanks for joining and have a great day!</p>
+  </body>
+</html>
+```
+
+Rails'in eposta yollayabilmesi için SMTP ayarlarının yapılı olmalı. Rails tek başına mail atabilir değil. SMTP sunucusuna epostayı teslim edebiliyor yalnızca.
+
+Ayarları set'lemek için.
+```ruby
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  address:              'smtp.gmail.com',
+  port:                 587,
+  domain:               'example.com',
+  user_name:            '<username>',
+  password:             '<password>',
+  authentication:       'plain',
+  enable_starttls_auto: true }
+```
+
+Test amaçlı Mailtrap kullanılabilir.
+
+# Active Storage
+
 

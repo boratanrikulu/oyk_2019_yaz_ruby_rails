@@ -722,10 +722,14 @@ Log
 
 log/development.log
 
+```ruby
 logger.debug "LOG"
+```
 
+```ruby
 logger.info  
 logger.fatal
+```
 
 ---
 
@@ -737,7 +741,9 @@ Herşey nesne
 
 ----
 
+```ruby
 logs[ara]
+```
 
 ----
 
@@ -745,22 +751,25 @@ Byebug ile debugging yapılabilir
 
 Rails ile gelmiyor ayrı bir gem
 
+```sh
 gem install byebug
+```
 
 görmek istediğimiz kodun üstüne yazılır
 
+```ruby
 byebug  
 @article.inspect
+````
 
 Konsolda oraya kadar gelip durur
 
-contunie ile devam edebiliriz
+`contunie` ile devam edebiliriz
 
 next ile bir sonraki adıma geçilir
 
-ActionDispatch::Response  
-ActionDispatch modülünün response classı
+`ActionDispatch::Response`. ActionDispatch modülünün response class'ı.
 
-Byebug bir break point, logger değil
+`Byebug` bir break point, logger değil
 
 ---

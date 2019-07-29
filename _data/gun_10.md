@@ -344,3 +344,19 @@ Controller
                                        --------
 
 ```
+
+# Action Cable
+
+Normalde Client-Server iletişimin sürmesi için client isteğinin yapılıp yapılmadığını anlamak için süreklik sormalı buna pulling. Bunun önüne geçmek için Client-Server arasında websocket ile arada bir kanal açılır. Bu kanal üzerinden direkt iletişim kurarlar.
+
+`channels/` altında cable'lar tutulur.
+
+```ruby
+ActionCable.server.broadcast("points",
+                             x: point.x,
+                             y: point.y)
+```
+
+...  
+...   
+...   

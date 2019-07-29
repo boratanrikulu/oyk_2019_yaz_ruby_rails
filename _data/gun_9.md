@@ -707,3 +707,60 @@ Sürekli ajax isteği attığı için kendi içinde bir yükleme barı gösterir
 Rails'de form'ları ajax haline getirilirse, hedeftedi action'da js.erb kullanılmasına gerek kalmaz. Direkt redirect_to yapılır geri kalanı turbolinks otomatik olarak halleder.
 
 ---
+
+# Debugging
+
+debug @article dedik
+
+simple_format @article.to_yaml
+
+@article.inspect, bir ruby objesi gördük
+
+---
+
+Log
+
+log/development.log
+
+logger.debug "LOG"
+
+logger.info  
+logger.fatal
+
+---
+
+Ruby'de type check yok
+
+Type yok
+
+Herşey nesne
+
+----
+
+logs[ara]
+
+----
+
+Byebug ile debugging yapılabilir
+
+Rails ile gelmiyor ayrı bir gem
+
+gem install byebug
+
+görmek istediğimiz kodun üstüne yazılır
+
+byebug  
+@article.inspect
+
+Konsolda oraya kadar gelip durur
+
+contunie ile devam edebiliriz
+
+next ile bir sonraki adıma geçilir
+
+ActionDispatch::Response  
+ActionDispatch modülünün response classı
+
+Byebug bir break point, logger değil
+
+---

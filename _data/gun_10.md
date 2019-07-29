@@ -286,3 +286,61 @@ bir api projesi yazıcaz,
 
 not: istenilen database kullanılabilir.
 
+---
+
+# MVC Tekrarı
+
+```
+
+MVC
+---
+Model,
+View,
+Controller
+
+             GET articles   --------
+             ------------> | SERVER | >--------------------------------
+            /               ---------                                  |
+           /               my_wee_blog                                 |
+          /                                                            |
+ --------/                                                             |
+| Client |                  - Article                                  |
+ --------                        - Article(model)                      |
+                                 - articles(controller)                |
+  get '/articles', <------------ - articles(resources)                 |
+       to: 'articlles#index'     - articles(view)                      |
+                                    - new                              |
+                                    - edit                             |
+                                                                       |
+                                                                       |
+                                                                       |
+  |--------------------------------------------------------------------|
+  |
+  v
+  GET articles -> articles#index -> Article.all -> index.html.erb
+  \
+   \
+    \
+     \
+      \
+       --------
+      | ROUTES |
+       --------
+                \                    (instance variable)
+                 \                       @articles          ------                    erb yorumlanır
+                  \                 ---------------------> | View | (index.html.erb) ----------------> index.html
+                   \               /                        ------
+                    \             /
+                     ------------ 
+                    | Controller |
+                     ------------ 
+       @articles = Article.all   \\             ----
+        Article.all ile model ile \\           | DB |
+        iletişim kurularak DB'den  \\           ----
+        tüm article'ler çekilir     \\          /
+        ve bir değişkene atılır      \\        /
+                                       --------
+                                      | Model  |
+                                       --------
+
+```

@@ -30,7 +30,7 @@ Günün başlangıç günü ayarlamak için
 config.beginning_of_week (:monday, :sunday vs.)
 ```
 
-Cache'nin nereye yazılacağını seçmek için
+Cache'in nereye yazılacağını seçmek için
 ```ruby
 config.cache_store (:memory_store, :file_store, :mem_cache_store, :null_store)
 ```
@@ -45,7 +45,7 @@ SSL için zorlamayı sağlamak için
 config.force_ssl = true
 ```
 
-Log'ların format'ını belirtmek için
+Log'ların formatını belirtmek için
 ```ruby
 config.log_formatter
 ```
@@ -78,7 +78,7 @@ Template Engine'ı ayarlamak için
 template_engine
 ```
 
-Form'da kullanılan token'i configure etmek
+Form'da kullanılan token'i konfigüre etmek
 ```ruby
 config.action_controller.per_form_csrf_tokens 
 ```
@@ -188,7 +188,7 @@ config.cache_store = :redis_cache_store, { url: cache_servers,
 
 ---
 
-### Caching development'de aç kapa yapılabilir.
+### Caching development'da aç kapa yapılabilir.
 
 ```sh
 $ rails dev:cache
@@ -232,7 +232,7 @@ CLIENT <------------------ SERVER
 
 ---
 
-API'lerde versiyonlar olur çünlü sizin api'nize bağlı uygulamalar olabilir. v1, v2, v3 diye gider...
+API'lerde versiyonlar olur çünkü sizin api'nize bağlı uygulamalar olabilir. v1, v2, v3 diye gider...
 
 ---
 
@@ -245,7 +245,7 @@ Böyle yarattığımızda artık ApplicationController, ActionController::API'de
 
 ---
 
-API'nin isteklere dönebileceği noktalara Endpoints denir.
+API'nin isteklere dönebileceği noktalara Endpoint denir.
 
 ---
 
@@ -255,11 +255,11 @@ HTTP istekleri için POSTMAN kullanılabilir.
 
 `ActionDispatch::Request#params` kullanıcıdan gelen istekleri alır.
 
-Kullanıcıdan alınan parametreler artık controller'de params olarak kullanılabilir olmuş olur.
+Kullanıcıdan alınan parametreler artık controller'da params olarak kullanılabilir olur.
 
 ---
 
-API'mızın tüm domain'lerden gelen isteklere cevap vermesi için pplication.rb'de
+API'mızın tüm domain'lerden gelen isteklere cevap vermesi için application.rb'de
 
 ```ruby
 config.middleware.insert_before 0, Rack::Cors do
@@ -285,4 +285,3 @@ bir api projesi yazıcaz,
 - [bonus] bir servis ile (ngrok gibi) dışarı açalım
 
 not: istenilen database kullanılabilir.
-

@@ -193,7 +193,7 @@ end
 
 ```ruby
 @user.profile_fullname
- AYNI
+ #AYNI
 @user.profile.try(:full_name)
 
 
@@ -220,8 +220,8 @@ Bunun tersi raw'dır. Direkt olarak alır aynı şekilde.
 
 ## String
 
-remove -> Bir ifadeyi silmek için    
-squish -> \n, boşluk vs silmek için  
+remove -> Bir ifadeyi silmek için
+squish -> \n, boşluk vs silmek için
 truncate(n) -> n karakterden fazla ile '...' koy
 
 ## Inflections
@@ -364,11 +364,11 @@ tr:
   hello: 'merhaba'
 ```
 
-Artık sistemin dili ing ise hello, türkçe ise merhaba yazacaktır.
+Artık sistemin dili en(english) ise hello, tr(türkçe) ise merhaba yazacaktır.
 
 Dili set'lemek için application.rb'ye direkt olarak `config.i18.default_locale = :tr` yazabilirdik. Ama bundan sonra server aç kapa yapmak vs. gerekiyor, pek kullanılabilir bir yol değil.
 
-Bunun için application controller'a ir method ekleriz.
+Bunun için application controller'a bir method ekleriz.
 
 kullanıcı artık localhost:3000?locale=tr path'ine giderse tr görecektir. Ama her defasında basmasını bekleyemeyiz, bundan dolayı cookie'ye yazmamız gerekecek kullanıcının tercihini.
 
@@ -384,7 +384,7 @@ def default_url_options
 end
 ```
 
-Tüm controller'i bir scope'a almak için application controller'ı scope alıyoruz.
+Tüm controller'ı bir scope'a almak için application controller'ı scope alıyoruz.
 
 ```ruby
 Rails.application.routes.draw do
@@ -531,11 +531,11 @@ Test amaçlı Mailtrap kullanılabilir.
 
 # Asset Pipeline
 
-Rails 6 ile birlikte Asset Pipile'nin yerini Webpacker almaya başladı.
+Rails 6 ile birlikte Asset Pipeline'nin yerini Webpacker almaya başladı.
 
-Webpacker'de assets dizininde bulunmaz. Direkt app'in altında bulunur.
+Webpacker Asset Pipeline gibi assets dizininde bulunmaz. Direkt olarak app'in altında bulunur.
 
-Asses Pipeline'da ise assests/javascript, asset/stylesheet, asset/images
+Asset Pipeline'da ise assests/javascript, asset/stylesheet, asset/images
 
 ---
 
@@ -546,7 +546,7 @@ app/assets/images
 <%= image_tag "rails.png" %>
 ```
 
-image_tag kullanınca gösterim sırasında fotoğraf adına bir hash ekler. Bunun amacı cache'leye bilmesi içindir. Fotoğraf değişince hash'de değişir fotoğrafın değiştiğini anlamış olur.
+image_tag kullanınca gösterim sırasında fotoğraf adına bir hash ekler. Bunun amacı cache'leyebilmesidir. Fotoğraf değişince hash de değişir ve bu sayede fotoğrafın değiştiğini anlamış olur.
 
 css içinde ruby kodu çalıştırmak için .css.erb demek yeterli olur. Örneğin css'de arkaplan fotoğrafı ekleyeceğimizde bunu kullanırız.
 
@@ -556,7 +556,7 @@ css içinde ruby kodu çalıştırmak için .css.erb demek yeterli olur. Örneğ
 
 ---
 
-Normal şartlarda veriler asset altındayken proje ayağa kalacapında sıkılaştırılarak public'e atılır.
+Normal şartlarda veriler assets altındayken proje ayağa kalkacağında sıkılaştırılarak public'e atılır.
 
 ```ruby
 RAILS_ENV=production rails assets:precompile
@@ -643,7 +643,7 @@ export default class extends Controller {
 </div>
 ```
 
-# Rails'de JavaScript
+# Rails'da JavaScript
 
 Rails javascript isteklerini halletmek için Unobtrusive JavaScript denen bir teknik kullanır.
 
@@ -696,7 +696,7 @@ Tüm link'ler sanki ajaxmış gibi çalışır.
 
 ---
 
-History'da kalınan yerleri filan da tutar.
+History'de kalınan yerleri filan da tutar.
 
 Turbolinks tarayıcının cache mekanizmasını yönetir.
 
@@ -704,7 +704,7 @@ Sürekli ajax isteği attığı için kendi içinde bir yükleme barı gösterir
 
 ---
 
-Rails'de form'ları ajax haline getirilirse, hedeftedi action'da js.erb kullanılmasına gerek kalmaz. Direkt redirect_to yapılır geri kalanı turbolinks otomatik olarak halleder.
+Rails'da form'ları ajax haline getirilirse, hedefteki action'da js.erb kullanılmasına gerek kalmaz. Direkt redirect_to yapılır geri kalanı turbolinks otomatik olarak halleder.
 
 ---
 
@@ -764,12 +764,12 @@ byebug
 
 Konsolda oraya kadar gelip durur
 
-`contunie` ile devam edebiliriz
+`continue` ile devam edebiliriz
 
 next ile bir sonraki adıma geçilir
 
 `ActionDispatch::Response`. ActionDispatch modülünün response class'ı.
 
-`Byebug` bir break point, logger değil
+`Byebug` bir breakpoint, logger değil
 
 ---

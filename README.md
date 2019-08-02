@@ -21,8 +21,9 @@ Kurs içeriği: [**`https://kamp.linux.org.tr/ruby-on-rails-ile-web-programlama`
 | 7 | Query Interface Devamı, Layouts and Rendering(View) | [**`Gün - 7`**](_data/gun_7.md) | [**`Rubit`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit) |
 | 8 | Form Helpers, Session-Cookie, Filters, Routing | [**`Gün - 8`**](_data/gun_8.md) | [**`Rubit`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/rubit) |
 | 9 | Routing, Active Support, Action Mailer, Asset Pipeline, Stimulus, JavaScript, Turbolinks, Debugging | [**`Gün - 9`**](_data/gun_9.md) | &bull; |
-| 10 | Configuring, Command Line, Caching, Variants, API, MVC Tekrar | [**`Gün - 10`**](_data/gun_10.md) | &bull; |
+| 10 | Configuring, Command Line, Caching, Variants, API, MVC Tekrar, Action Cable | [**`Gün - 10`**](_data/gun_10.md) | &bull; |
 | 11 | Ruby, Gem yazımı | [**`Gün - 11`**](_data/gun_11.md) | &bull; |
+| 12 | Gem yazımı devam, Blog ödevi, API ödevi | *Rahatsızlandığım için bugüne katılamadım, o yüzden maalesef notu yok.* | [**`Licence Plate Parser`**](https://github.com/enderahmetyurt/license_plate_parser) [**`Misty`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/misty) [**`Pet API`**]() |
 
 ---
 

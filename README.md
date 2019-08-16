@@ -8,7 +8,8 @@ Bu repo'nun amacı kamp sürecinde anlatımı yapılan konuları yazılı bir ka
 Kamp sürecinde yazıldığı için HAM VERİ aşamasındadır. Geliştirilmesine destekte bulunmak için PR gönderebilirsiniz.
 
 Kurs organizasyonu: [**`https://github.com/ruby-rails-mustafa-akgul-oyyk-2019`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019)  
-Kurs içeriği: [**`https://kamp.linux.org.tr/ruby-on-rails-ile-web-programlama`**](https://kamp.linux.org.tr/2019/yaz/kurslar/ruby-on-rails-ile-web-programlama/)
+Kurs içeriği: [**`https://kamp.linux.org.tr/ruby-on-rails-ile-web-programlama`**](https://kamp.linux.org.tr/2019/yaz/kurslar/ruby-on-rails-ile-web-programlama/)  
+Kurs eğitmen sponsoru: [**`https://lab2023.com`**](https://lab2023.com)
 
 | # | Konu Başlığı | Doküman | Uygulama |
 |:-:|:------------:|:-------:|:--------:|

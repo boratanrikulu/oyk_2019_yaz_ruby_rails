@@ -39,11 +39,11 @@ Bu projeyi geliştirmek için PR gönderebilirsiniz. Benim ile iletişime geçme
 #### Eğitmenler
 
 > Emeği geçen herkese sonsuz teşekkürler.  
-> [**`tayfunoziserikan`**](https://github.com/tayfunoziserikan)
-  [**`enderahmetyurt`**](https://github.com/enderahmetyurt)
-  [**`boratanrikulu`**](https://github.com/boratanrikulu)
-  [**`hasantezcan`**](https://github.com/hasantezcan)
-  [**`mrvsahan`**](https://github.com/mrvsahan)
-  [**`coskuntekin`**](https://github.com/coskuntekin)
+> [**`@tayfunoziserikan`**](https://github.com/tayfunoziserikan)
+  [**`@enderahmetyurt`**](https://github.com/enderahmetyurt)
+  [**`@boratanrikulu`**](https://github.com/boratanrikulu)
+  [**`@hasantezcan`**](https://github.com/hasantezcan)
+  [**`@mrvsahan`**](https://github.com/mrvsahan)
+  [**`@coskuntekin`**](https://github.com/coskuntekin)
 
 ![egitmenler](_data/_images/egitmenler.jpg)

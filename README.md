@@ -1,6 +1,6 @@
 ## Ruby / Rails - OYK 2019 Yaz - Notlar
 
-<p align="right"> 
+<p align="right">
 	Son Güncelleme : 29 Temmuz, 2019
 </p>
 
@@ -24,7 +24,7 @@ Kurs içeriği: [**`https://kamp.linux.org.tr/ruby-on-rails-ile-web-programlama`
 | 10 | Configuring, Command Line, Caching, Variants, API, MVC Tekrar, Action Cable | [**`Gün - 10`**](_data/gun_10.md) | &bull; |
 | 11 | Ruby, Gem yazımı | [**`Gün - 11`**](_data/gun_11.md) | &bull; |
 | 12 | Gem yazımı devam, Blog ödevi, API ödevi | *Rahatsızlandığım için bugüne katılamadım, o yüzden maalesef notu yok.* | [**`Licence Plate Parser`**](https://github.com/enderahmetyurt/license_plate_parser) [**`Misty`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/misty) [**`Pet API`**]() |
-| 13 | Web Socket Tekrarı | [**`Gün - 13`**](_data/gun_13.md) | &bull; |
+| 13 | Web Socket Tekrarı, Active Storage, Active Job, ENV, Rails Template(cybele), Security | [**`Gün - 13`**](_data/gun_13.md) | &bull; |
 
 ---
 

@@ -26,7 +26,7 @@ Kurs eğitmen sponsoru: [**`https://lab2023.com`**](https://lab2023.com)
 | 11 | Ruby,<br> Gem yazımı | &bull; [**`Günlük Notlarım - 11`**](_data/_notes/gun_11.md) | **x** |
 | 12 | Gem yazımı devam,<br> Blog ödevi [**[3]**](https://gist.github.com/boratanrikulu/b42a9ea813f9c76ec6b833f215c8b91c),<br> API ödevi | *Rahatsızlandığım için bugüne katılamadım, o yüzden maalesef notu yok.* | &bull; [**`Licence Plate Parser`**](https://github.com/enderahmetyurt/license_plate_parser) <br> &bull; [**`Misty`**](https://github.com/ruby-rails-mustafa-akgul-oyyk-2019/misty) <br> &bull; [**`Pet API`**]() |
 | 13 | Web Socket Tekrarı,<br> Active Storage,<br> Active Job,<br> ENV,<br> Rails Template(cybele),<br> Security | &bull; [**`Günlük Notlarım - 13`**](_data/_notes/gun_13.md) <br> &bull; [**`Active Job - Arkaplan Görevleri`**](https://boratanrikulu.dev/active-job-rails-arkaplan-gorevleri/) | **x** |
-| 14 | Kamp bitirme projesi | **x** | **x** |
+| 14 | Kamp bitirme projesi | **x** | &bull; [**`Voca`**](https://github.com/yunusemredilber/voca) |
 
 Bu projeyi geliştirmek için PR gönderebilirsiniz. Benim ile iletişime geçmek için : [**`@boratanrikulu`**](https://t.me/boratanrikulu)
 

@@ -26,7 +26,7 @@ end
 preview_photo GET    /photos/:id/preview(.:format)    photos#preview
 ```
 
-Collection kullanılarak dönülecek kaydın çoğul yani bir collection olacağını belirtimiş oluruz.
+Collection kullanılarak dönülecek kaydın çoğul yani bir collection olacağını belirtmiş oluruz.
 
 ```ruby
 resources :photos do

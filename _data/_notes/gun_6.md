@@ -448,7 +448,7 @@ posts = Post.find([1, 10])
 
 **Take**
 
-Almak istediğimiz kayıt sayısını belirtiririz.
+Almak istediğimiz kayıt sayısını belirtiriz.
 
 ```ruby
 people = Person.all.where(age: 18).take(5)

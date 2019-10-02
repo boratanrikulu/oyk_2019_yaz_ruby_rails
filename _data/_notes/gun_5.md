@@ -211,7 +211,7 @@ person.errors.messages
 
 ---
 
-Şimdi öğrendiğimiz bilgiler ışınğında denemeler yapıcaz.
+Şimdi öğrendiğimiz bilgiler ışığında denemeler yapıcaz.
 
 Örneklerimiz için validation_example diye ayrı bir proje oluşturduk.
 ```sh

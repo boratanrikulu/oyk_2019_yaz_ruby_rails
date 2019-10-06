@@ -347,16 +347,100 @@ Controller
 
 # Action Cable
 
-Normalde Client-Server iletişimin sürmesi için client isteğinin yapılıp yapılmadığını anlamak için süreklik sormalı buna pulling. Bunun önüne geçmek için Client-Server arasında websocket ile arada bir kanal açılır. Bu kanal üzerinden direkt iletişim kurarlar.
+Action Cable, WebSocket'i rails uygulamanıza sorunsuz bir şekilde entegre eder.
 
-`channels/` altında cable'lar tutulur.
+## WebSocket
+
+WebSocket, kullanıcının tarayıcısı ve sunucusu arasında iki yönlü ve etkileşimli iletişim kurmayı mümkün kılan, tek bir TCP bağlantısı üzerinde çalışan gelişmiş bir iletişim protokolüdür.
+WebSocket ile gerçek zamanlı bağlantılar oluşturabilirsiniz.
+
+## Pub/Sub
+
+Pub/Sub veya Publish-Subscribe(Yayınla/Abone ol), yayıncıların, alıcıları belirtmeden soyut bir alıcılar topluluğuna (abonelere) veri gönderdiği bir mesaj paradigmasıdır. Action Cable bu yaklaşımı sunucu ile birçok istemci arasında iletişim kurmak için kullanır.
+Alıcılar bir yayıncıyı dinlemeye başlar (o yayıncıya abone olur). Yayıncılar bir veri gönderimi yaptığı zaman, tüm aboneler gerçek zamanlı olarak veriyi elde ederler.
+
+Action Cable, hem istemci tarafı için JavaScript frameworkü, hem de sunucu tarafı için Ruby frameworkü sağlayan tam kapsamlı bir sistemdir.
+
+İşleyiş çok basittir;
+
+1- Sunucu tarafında bir kanal açılır.
 
 ```ruby
-ActionCable.server.broadcast("points",
-                             x: point.x,
-                             y: point.y)
+# app/channels/messages_channel.rb
+class MessagesChannel < ApplicationCable::Channel
+  def subscribed
+    stream_from "messages_general"
+  end
+end
 ```
 
-...  
-...   
-...   
+2- İstemci tarafında bu kanala abone olunur. Gelen (gelecek olan) veri ile ne yapılacağı, javascript ile halledilir.
+
+```javascript
+App.cable.subscriptions.create({
+        channel: 'MessagesChannel'
+    },
+    {
+        received: function(data) {
+            // Add data to DOM.
+            $('#messages-container').prepend(data.body);
+        },
+    });
+```
+
+3- Sunucu tarafında veri yayınlanır.
+
+```ruby
+def create
+  @message = Message.new(message_params)
+  if @message.save
+    ActionCable.server.broadcast("messages_general", body: html(@message)
+    )
+  end
+end
+
+def html(message)
+  ApplicationController.render(partial: 'messages/message', locals: { message: message })
+end
+```
+
+Hurray :smile:
+
+Daha özel bir senaryo için aşağıdaki gibi bir yapı kullanılabilir.
+
+```ruby
+# app/channels/messages_channel.rb
+class MessagesChannel < ApplicationCable::Channel
+  def subscribed
+    stream_from "messages_#{params[:channel_id]}"
+  end
+end
+```
+
+```javascript
+App.cable.subscriptions.create({
+        channel: 'MessagesChannel', channel_id: $("#user_channel").text()
+    },
+    {
+        received: function(data) {
+            // Add data to DOM.
+            $('#messages-container').prepend(data.body);
+        },
+    });
+```
+
+```ruby
+def create
+  @message = Message.new(message_params)
+  if @message.save
+    ActionCable.server.broadcast("messages_#{@message.channel.id}", html: html(message))
+  end
+end
+
+def html(message)
+  ApplicationController.render(partial: 'messages/message', locals: { message: message })
+end
+```
+
+Hepsi bu kadar :smile:
+

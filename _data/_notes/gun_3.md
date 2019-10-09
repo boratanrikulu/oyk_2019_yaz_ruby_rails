@@ -32,7 +32,7 @@ rbenv'i update'lemek için **
 ```sh
 cd /home/fsutil/.rbenv/plugins/ruby-build && git pull && cd -
 ```
-> Eğer yeni bir Ruby versiyonunu kurmak istediğinizde ilgili versiyon bulunamadı hatası alırsanız rbenv'i update etmelisiniz
+> **Eğer yeni bir Ruby versiyonunu kurmak istediğinizde ilgili versiyon bulunamadı hatası alırsanız rbenv'i update etmelisiniz
 
 yeni bir ruby versiyonu kurmak için
 ```sh

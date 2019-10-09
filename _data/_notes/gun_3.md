@@ -28,10 +28,11 @@ Rbenv ile kurabileceğimiz ruby versiyonlarına aşağıdaki gibi bakabiliriz.
 rbenv install --list
 ```
 
-rbenv'i update'lemek için
+rbenv'i update'lemek için **
 ```sh
 cd /home/fsutil/.rbenv/plugins/ruby-build && git pull && cd -
 ```
+> Eğer yeni bir Ruby versiyonunu kurmak istediğinizde ilgili versiyon bulunamadı hatası alırsanız rbenv'i update etmelisiniz
 
 yeni bir ruby versiyonu kurmak için
 ```sh
